@@ -334,14 +334,21 @@ server = function(input, output, session){
     if (!is.null(input$phyloseqData)) {
       dataInfile  = reactive({
         phyloseq.data = input$phyloseqData
+        
         ext <- tools::file_ext(phyloseq.data$datapath)
         
         req(phyloseq.data)
         if (ext == "Rdata") {
+          
           phyloseq.dataPath = phyloseq.data$datapath
           e = new.env()
           name <- load(phyloseq.dataPath, envir = e)
           data <- e[[name]]
+          
+          otu.tab <- otu_table(data, taxa_are_rows = TRUE)
+          tree <- rtree(nrow(otu.tab))
+          tree$tip.label <- rownames(otu.tab)
+          data <- merge_phyloseq(data, tree)
           
           if (sum(sapply(sample_data(data),is.factor))!=0) {
             sample_data(data)[,which(sapply(sample_data(data), is.factor))] = lapply(sample_data(data)[,which(sapply(sample_data(data), is.factor))], as.character)
@@ -357,6 +364,11 @@ server = function(input, output, session){
         } else if (ext == "rds") {
           phyloseq.dataPath = phyloseq.data$datapath
           data <- readRDS(phyloseq.dataPath)
+          
+          otu.tab <- otu_table(data, taxa_are_rows = TRUE)
+          tree <- rtree(nrow(otu.tab))
+          tree$tip.label <- rownames(otu.tab)
+          data <- merge_phyloseq(data, tree)
           
           if (sum(sapply(sample_data(data),is.factor))!=0) {
             sample_data(data)[,which(sapply(sample_data(data), is.factor))] = lapply(sample_data(data)[,which(sapply(sample_data(data), is.factor))], as.character)
@@ -448,6 +460,9 @@ server = function(input, output, session){
               tax.tab <- tax_table(as.matrix(tax.tab))
               sam.dat <- sample_data(sam.dat)
               
+              tree <- rtree(nrow(otu.tab))
+              tree$tip.label <- rownames(otu.tab)
+              
               if (sum(colnames(otu.tab) %in% rownames(sam.dat)) < sum(rownames(otu.tab) %in% rownames(sam.dat))) {
                 otu.tab = t(otu.tab)
               }
@@ -472,7 +487,7 @@ server = function(input, output, session){
               )
               
               incProgress(1/10, message = "Merging")
-              biomData <- merge_phyloseq(otu.tab, tax.tab, sam.dat)
+              biomData <- merge_phyloseq(otu.tab, tax.tab, sam.dat, tree)
               return(biomData)
             } else {
               shinyjs::toggle(id = "textfilesUpload_error", anim = TRUE, time = 1, animType = "fade")
@@ -1028,7 +1043,7 @@ server = function(input, output, session){
                          icon = icon("check"), animation = "jelly",
                          choices = c("Double-sample tree", "Propensity tree"), selected = "Propensity tree", width = '70%'),
       
-
+      
       
       
       # tags$style(type = 'text/css', "#cf_method .pretty .state label::after {margin-top: 20px}"),
@@ -2698,7 +2713,7 @@ server = function(input, output, session){
             var.names.list[[name]] <- data.frame(sub = colnames(step2.result$Taxa), ori = step2.result$taxa.names)
             
             # Step 3. BoRT
-
+            
             set.seed(521)
             step3.result <- try(bort.func(step2.result, name, n.tree = 10000), silent = TRUE)
             
@@ -2709,7 +2724,7 @@ server = function(input, output, session){
             step4.result <- try(bort.treatment.pred(step2.result, name, n.tree = 10000), silent = TRUE)
             
             dt.fit.list[[name]] <- step2.result$best.dt.fit
-
+            
             rf.fit.list[[name]] <- step4.result
             
             # DT used variable
@@ -2889,3 +2904,4 @@ server = function(input, output, session){
     shinyjs::enable("cf_reference")
   })
 }
+
