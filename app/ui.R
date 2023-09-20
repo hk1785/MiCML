@@ -25,6 +25,7 @@ library(grid)
 library(ggplotify)
 library(remotes)
 library(doParallel)
+library(MiRKATMC)
 
 source("setSliderColor.R")
 source("MiDataProc.Data.Upload.R")

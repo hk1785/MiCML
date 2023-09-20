@@ -32,7 +32,7 @@ RUN R -e "install.packages(c('shiny', 'BiocManager', 'rmarkdown', 'seqinr', 'shi
 'shinyjs', 'googleVis', 'xtable', 'DT', 'htmltools', 'phangorn', 'bios2mds', 'zip', 'ape', 'zCompositions', 
 'compositions', 'stringr', 'caret', 'ggplot2', 'data.table', 'fontawesome', 'grid', 'ggplotify', 
 'remotes', 'doParallel', 'reshape2', 'fossil', 'MiRKAT', 'proxy', 'ecodist', 'GUniFrac', 'picante', 
-'randomForest', 'grf', 'rpart', 'rpart.plot'), repos='https://cloud.r-project.org/')"
+'randomForest', 'grf', 'rpart', 'rpart.plot', 'vegan'), repos='https://cloud.r-project.org/')"
 
 RUN R -e "BiocManager::install('phyloseq')"
 RUN R -e "BiocManager::install('sva')"
@@ -43,9 +43,9 @@ RUN R -e "remotes::install_github('jcrodriguez1989/chatgpt')"
 RUN R -e "remotes::install_github('zmjones/edarf', subdir = 'pkg')"
 
 RUN R -e "remotes::install_github('wdl2459/ConQuR')
-RUN R -e "remotes::install_github('vegandevs/vegan')
 RUN R -e "remotes::install_github('prise6/aVirtualTwins', build_vignettes = TRUE)"
 RUN R -e "remotes::install_github('hk1785/MiVT', force = TRUE)
+RUN R -e "remotes::install_github('Zhiwen-Owen-Jiang/MiRKATMC', force = TRUE)
 
 RUN mkdir /root/app
 COPY app /root/app
