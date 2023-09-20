@@ -31,7 +31,7 @@ RUN apt-get update && apt-get install -y \
 RUN R -e "install.packages(c('ape', 'bios2mds', 'BiocManager', 'caret', 'compositions', 'data.table', 'doParallel', 'DT', 'ecodist', 'fontawesome', 'fossil', 'ggplot2', 'grid', 'ggplotify', 'googleVis', 'grf', 'GUniFrac', 'htmltools','MiRKAT', 'picante', 'plotly', 'phangorn', 'proxy', 'rmarkdown', 'randomForest', 'remotes', 'rpart', 'rpart.plot', 'reshape2', 'seqinr', 'shinydashboard', 'shiny', 'shinyWidgets', 'shinyjs', 'stringr', 'tidyverse', 'vegan', 'VGAM', 'xtable', 'zip', 'zCompositions'), repos='https://cloud.r-project.org/')"
 
 RUN R -e "remotes::install_github('prise6/aVirtualTwins', build_vignettes = TRUE)"
-RUN R -e "remotes::install_github('wdl2459/ConQuR', force = TRUE)
+RUN R -e "remotes::install_github('wdl2459/ConQuR', force = TRUE)"
 RUN R -e "BiocManager::install('phyloseq')"
 RUN R -e "remotes::install_github('joey711/biomformat')"
 RUN R -e "remotes::install_github('jcrodriguez1989/chatgpt')"
