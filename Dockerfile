@@ -46,9 +46,9 @@ COPY app /root/app
 COPY Rprofile.site /usr/lib/R/etc/
 
 COPY app/Data/Immuno.Metagenome.Char.Rdata /root/app
-COPY app/Data/otu_tab.txt /root/app
-COPY app/Data/sam_dat.txt /root/app
-COPY app/Data/tax_tab.txt /root/app
+COPY app/Data/otu.tab.txt /root/app
+COPY app/Data/sam.dat.txt /root/app
+COPY app/Data/tax.tab.txt /root/app
 COPY app/Data/tree.tre /root/app
 
 COPY app/www/Home2.png /root/app
