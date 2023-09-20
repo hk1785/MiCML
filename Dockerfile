@@ -28,11 +28,7 @@ RUN apt-get update && apt-get install -y \
     libmpfr-dev \
     && rm -rf /var/lib/apt/lists/*
 
-RUN R -e "install.packages(c('ape', 'bios2mds', 'BiocManager', 'caret', 'compositions', 'data.table', 'doParallel', 'DT', 'ecodist', 'fontawesome', 'fossil', 
-'ggplot2', 'grid', 'ggplotify', 'googleVis', 'grf', 'GUniFrac', 
-'htmltools', 'MiRKAT', 'picante', 'plotly', 'phangorn', 'proxy', 'rmarkdown', 'randomForest', 'remotes', 'rpart', 'rpart.plot', 'reshape2', 
-'seqinr', 'shinydashboard', 'shiny', 'shinyWidgets', 'shinyjs', 'stringr', 'tidyverse', 
-'vegan', 'VGAM', 'xtable', 'zip', 'zCompositions'), repos='https://cloud.r-project.org/')"
+RUN R -e "install.packages(c('ape', 'bios2mds', 'BiocManager', 'caret', 'compositions', 'data.table', 'doParallel', 'DT', 'ecodist', 'fontawesome', 'fossil', 'ggplot2', 'grid', 'ggplotify', 'googleVis', 'grf', 'GUniFrac', 'htmltools','MiRKAT', 'picante', 'plotly', 'phangorn', 'proxy', 'rmarkdown', 'randomForest', 'remotes', 'rpart', 'rpart.plot', 'reshape2', 'seqinr', 'shinydashboard', 'shiny', 'shinyWidgets', 'shinyjs', 'stringr', 'tidyverse', 'vegan', 'VGAM', 'xtable', 'zip', 'zCompositions'), repos='https://cloud.r-project.org/')"
 
 RUN R -e "remotes::install_github('prise6/aVirtualTwins', build_vignettes = TRUE)"
 RUN R -e "remotes::install_github('wdl2459/ConQuR')
@@ -59,7 +55,7 @@ COPY app/www/Home2.png /root/app
 
 COPY app/MiDataProc.Data.Input.R /root/app
 COPY app/MiDataProc.Data.Upload.R /root/app
-COPY app/MiDataProc.Description.R /root/app
+COPY app/MiDataProc.Descriptive.R /root/app
 COPY app/MiDataProc.GLM.R /root/app
 COPY app/MiDataProc.ML.Models.R /root/app
 COPY app/MiDataProc.Causal.R /root/app
