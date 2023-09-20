@@ -18,19 +18,19 @@
                       taxa that enhance (or lower) the efficacy of the primary treatment. We also stress that MiCML 
                       can handle the data from either randomized controlled trials or observational studies. 
                       MiCML can be a useful analytic tool for microbiome-based personalized medicine to enhance patient 
-                      well-beings while lowering medical expenses.", style = "font-size:12pt")
+                      well-beings while lowering medical expenses.", style = "font-size:13pt")
   
   HOME_COMMENT = p(strong("Description:"), "MiCML is a web cloud computing platform for the comprehensive analysis of treatment effects using microbiome profiles. MiCML consists of three", strong("Data Processing"), "modules, (i) Data Input, (ii) Batch Effect Correction & Quality Control, and (iii) Data Transformation and three", strong("Data Analysis"), "modules, 
-                   (i) Descriptive Analysis, (ii) Generalized Linear Models, and (iii) Causal Machine Learning.", style = "font-size:12pt")
+                   (i) Descriptive Analysis, (ii) Generalized Linear Models, and (iii) Causal Machine Learning.", style = "font-size:13pt")
   
   HOME_COMMENT2 = p(strong("URLs:"), "Web server (online implementation):", tags$a(href = "http://micml.micloud.kr", "http://micml.micloud.kr"), 
                     "; GitHub repository (local implementation):", 
-                    tags$a(href = "https://github.com/hk1785/micmlgit", "https://github.com/hk1785/micmlgit"), style = "font-size:12pt")
+                    tags$a(href = "https://github.com/hk1785/micmlgit", "https://github.com/hk1785/micmlgit"), style = "font-size:13pt")
   
-  HOME_COMMENT3 = p(strong("Maintainers:"), "Hyunwook Koh (", tags$a(href = "hyunwook.koh@stonybrook.edu", "hyunwook.koh@stonybrook.edu"), ")", style = "font-size:12pt")
+  HOME_COMMENT3 = p(strong("Maintainers:"), "Hyunwook Koh (", tags$a(href = "hyunwook.koh@stonybrook.edu", "hyunwook.koh@stonybrook.edu"), ")", style = "font-size:13pt")
   
   HOME_COMMENT4 = p(strong("Reference:"), "Koh H, Kim J, Jang H. 
-                    A microbiome-based causal machine learning cloud platform for the analysis of treatment effects using microbial profiles on user-friendly web interfaces (Submitted)", style = "font-size:12pt")
+                    A microbiome-based causal machine learning cloud platform for the analysis of treatment effects using microbial profiles on user-friendly web interfaces (Submitted)", style = "font-size:13pt")
   
   INPUT_PHYLOSEQ_COMMENT1 = p(strong("Description:"), br(), br(), "This should be an '.rdata' or '.rds' file, and the data should be in 'phyloseq' format (see ", 
                               htmltools::a(tags$u("https://bioconductor.org/packages/release/bioc/html/phyloseq.html"), style = "color:red3"),
@@ -104,14 +104,10 @@
                             Default is \"uncultured\", \"incertae\", \"Incertae\", \"unidentified\", \"unclassified\", \"unknown\".",
                             style = "font-size:11pt")
   
-  QC_BATCH_REFERENCE = p(h5(strong("ConQuR"), style = "margin-bottom: -15px"), br(),
-                         "Ling W, Lu J, Zhao N. et al. Batch effects removal for microbiome data via conditional quantile regression. Nat Commun. 2022;13(5418)", br(),
-                         h5(strong("PCoA"), style = "margin-bottom: -15px"), br(),
-                         "Torgerson WS. Multidimensional scaling: I. Theorey and method. Psychometrika. 1952;17:401-419.", br(),
-                         h5(strong("Bray-Curtis"), style = "margin-bottom: -15px"), br(),
-                         "Bray JR, Curtis JT. An ordination of the upland forest communities of southern Wisconsin. Ecol Monogr. 1957;27:325-349.", br(),
-                         h5(strong("CLR"), style = "margin-bottom: -15px"), br(),
-                         "Aitchison J. The statistical analysis of compositional data. J R Stat Soc Series B Stat Methodol. 1982;44(2):139-160.")
+  QC_BATCH_REFERENCE = p("1. Ling W, Lu J, Zhao N. et al. Batch effects removal for microbiome data via conditional quantile regression. Nat Commun. 2022;13(5418)", br(),
+                         "2. Torgerson WS. Multidimensional scaling: I. Theorey and method. Psychometrika. 1952;17:401-419.", br(),
+                         "3. Bray JR, Curtis JT. An ordination of the upland forest communities of southern Wisconsin. Ecol Monogr. 1957;27:325-349.", br(),
+                         "4. Aitchison J. The statistical analysis of compositional data. J R Stat Soc Series B Stat Methodol. 1982;44(2):139-160.")
   
   QC_BATCH_CONQUR_REFERENCE = p("1. Ling W, Lu J, Zhao N. et al. Batch effects removal for microbiome data via conditional quantile regression. Nat Commun. 2022;13(5418).", style = "font-size:11pt")
   
@@ -641,7 +637,7 @@ server = function(input, output, session){
       output$batch.method.select <- renderUI({
         tagList(
           prettyRadioButtons("batch.method", 
-                             label = h5(strong("Method", style = "color:black")), 
+                             label = h4(strong("Method", style = "color:black")), 
                              animation = "jelly",
                              choices = c("ConQur"), 
                              selected = "ConQur", 
@@ -653,7 +649,7 @@ server = function(input, output, session){
       output$batch <- renderUI({
         tagList(
           p(" ", style = "margin-top: 25px;"),
-          h5(strong("Batch variable", style = "color:black")),
+          h4(strong("Batch variable", style = "color:black")),
           p("A variable for batch IDs (e.g., labs, studies, states, locations, times)", style = "font-size:10pt"),
           p(" ", style = "margin-bottom: +15px;"),
           selectInput("batch.var", label = NULL,
@@ -675,7 +671,7 @@ server = function(input, output, session){
       output$prim <- renderUI({
         tagList(
           p(" ", style = "margin-top: 25px;"),
-          h5(strong("Primary variable", style = "color:black")),
+          h4(strong("Primary variable", style = "color:black")),
           p("A binary or continuous variable on the patient's recovery (required). ConQuR maintains the variability in the microbiome data due to this primary variable.", style = "font-size:10pt"),
           p(" ", style = "margin-bottom: +15px;"),
           selectInput("prim.var", label = NULL,
@@ -691,7 +687,7 @@ server = function(input, output, session){
     output$covar <- renderUI({
       tagList(
         p(" ", style = "margin-top: 25px;"),
-        h5(strong("Nuisance variable(s)", style = "color:black")),
+        h4(strong("Nuisance variable(s)", style = "color:black")),
         p("Other nuisance variable(s) on the patients' characteristics (optional). ConQuR maintains the variability in the microbiome data due to these nuisance variable(s).", style = "font-size:10pt"),
         p(" ", style = "margin-bottom: +15px;"),
         prettyCheckboxGroup("covar", label = NULL,
@@ -708,7 +704,7 @@ server = function(input, output, session){
     
     output$de_response <- renderUI({
       tagList(
-        h5(strong("Response variable", style = "color:black")),
+        h4(strong("Response variable", style = "color:black")),
         p("A binary or continuous variable on the patient's health or disease status after treatment.", style = "font-size:10pt"), 
         selectInput("response_sel_de", label = NULL,
                     c("Choose one" = "", sort(names(chooseData$sam.dat))), selected = "Response", width = '70%'))
@@ -732,13 +728,13 @@ server = function(input, output, session){
         })
         
         output$de_chooseTest <- renderUI({
-          selectInput("de_method", label = h5(strong("Method", style = "color:black")), 
+          selectInput("de_method", label = h4(strong("Method", style = "color:black")), 
                       choices = c("Fisher's exact test (Default)", "Pearson's Chi-squared test"), width = '98%')
         })
         
         output$de_legend <- renderUI({
           tagList(
-            prettyRadioButtons("de_legend_sel", label = h5(strong("Legend location", style = "color:black")),  choices = c("Top left", "Top right", "Top left on the left panel only", "Top right on the left panel only", "Top left on the right panel only", "Top right on the right panel only"), 
+            prettyRadioButtons("de_legend_sel", label = h4(strong("Legend location", style = "color:black")),  choices = c("Top left", "Top right", "Top left on the left panel only", "Top right on the left panel only", "Top left on the right panel only", "Top right on the right panel only"), 
                                icon = icon("check"), animation = "jelly", selected = "Top left", width = '80%'),
             p(" ", style = "margin-bottom: -10px;"),
             p("You can change the location of the figure legend to minimize overlaps with the other parts in the graph."),
@@ -750,12 +746,12 @@ server = function(input, output, session){
         shinyjs::hide("de_response_rename")
         
         output$de_chooseTest <- renderUI({
-          selectInput("de_method", label = h5(strong("Method", style = "color:black")), 
+          selectInput("de_method", label = h4(strong("Method", style = "color:black")), 
                       choices = c("Mann-Whitney test (Default)", "Welch's t-test"), width = '98%')})
         
         output$de_legend <- renderUI({
           tagList(
-            prettyRadioButtons("de_legend_sel", label = h5(strong("Legend location", style = "color:black")),  choices = c("Top left", "Top right"), shape = c("round"), selected = "Top left", width = '80%'),
+            prettyRadioButtons("de_legend_sel", label = h4(strong("Legend location", style = "color:black")),  choices = c("Top left", "Top right"), shape = c("round"), selected = "Top left", width = '80%'),
             p(" ", style = "margin-bottom: -10px;"),
             p("You can change the location of the figure legend to minimize overlaps with the other parts in the graph."),
             p(" ", style = "margin-bottom: +15px;"),
@@ -769,7 +765,7 @@ server = function(input, output, session){
       output$de_treat <- renderUI({
         tagList(
           p(" ", style = "margin-bottom: +15px;"),
-          h5(strong("Treatment variable", style = "color:black")),
+          h4(strong("Treatment variable", style = "color:black")),
           p("A binary variable on the treatment status (e.g., placebo vs. drug, old drug vs. new drug).", style = "font-size:10pt"), 
           selectInput("treat_sel_de", label = NULL,
                       choices = sort(treat_vars_options), selected = "Treatment", width = '70%'))
@@ -806,13 +802,13 @@ server = function(input, output, session){
     observeEvent(chooseData$sam.dat, {
       
       output$int_format <- renderUI({
-        prettyRadioButtons("int_dataType", label = h5(strong("Data format", style = "color:black")), icon = icon("check"), animation = "jelly",
+        prettyRadioButtons("int_dataType", label = h4(strong("Data format", style = "color:black")), icon = icon("check"), animation = "jelly",
                            c("CLR (Default)", "Count (Rarefied)", "Proportion", "Arcsine-root"), selected = "CLR (Default)", width = '70%')
       })
       
       output$int_response <- renderUI({
         tagList(
-          h5(strong("Response variable", style = "color:black")),
+          h4(strong("Response variable", style = "color:black")),
           p("A binary or continuous variable on the post-treatment status of the patients' health or disease.", style = "font-size:10pt"), 
           selectInput("response_sel_int", label = NULL,
                       sort(names(chooseData$sam.dat)), selected = "Response", width = '70%'))
@@ -836,17 +832,17 @@ server = function(input, output, session){
           })
           
           output$int_chooseTest <- renderUI({
-            selectInput("int_method", label = h5(strong("Method", style = "color:black")), 
+            selectInput("int_method", label = h4(strong("Method", style = "color:black")), 
                         choices = c("Logistic regression"), width = '98%')
           })
           
           output$int_legend <- renderUI({
             tagList(
-              prettyRadioButtons("int_legend_sel", label = h5(strong("Legend location", style = "color:black")),  choices = c("Top left", "Top right", "Bottom left", "Bottom right"), icon = icon("check"), animation = "jelly", selected = "Top left", width = '80%'),
+              prettyRadioButtons("int_legend_sel", label = h4(strong("Legend location", style = "color:black")),  choices = c("Top left", "Top right", "Bottom left", "Bottom right"), icon = icon("check"), animation = "jelly", selected = "Top left", width = '80%'),
               p(" ", style = "margin-bottom: -10px;"),
               p("You can change the location of the figure legend to minimize overlaps with the other parts in the graph."),
               p(" ", style = "margin-bottom: +20px;"),
-              h5(strong("Taxonomic ranks", style = "color:black")),
+              h4(strong("Taxonomic ranks", style = "color:black")),
               p(" ", style = "margin-bottom: -10px;"),
               prettyRadioButtons("tax_rank", label = NULL,  animation = "jelly",
                                  c("Phylum - Genus (Default)", "Phylum - Species"), selected = "Phylum - Genus (Default)",
@@ -863,16 +859,16 @@ server = function(input, output, session){
           shinyjs::hide("int_response_rename")
           
           output$int_chooseTest <- renderUI({
-            selectInput("int_method", label = h5(strong("Method", style = "color:black")), 
+            selectInput("int_method", label = h4(strong("Method", style = "color:black")), 
                         choices = c("Linear regression"), width = '98%')})
           
           output$int_legend <- renderUI({
             tagList(
-              prettyRadioButtons("int_legend_sel", label = h5(strong("Legend location", style = "color:black")),  choices = c("Top left", "Top right", "Bottom left", "Bottom right"), shape = c("round"), selected = "Top left", width = '80%'),
+              prettyRadioButtons("int_legend_sel", label = h4(strong("Legend location", style = "color:black")),  choices = c("Top left", "Top right", "Bottom left", "Bottom right"), shape = c("round"), selected = "Top left", width = '80%'),
               p(" ", style = "margin-bottom: -10px;"),
               p("You can change the location of the figure legend to minimize overlaps with the other parts in the graph."),
               p(" ", style = "margin-bottom: +20px;"),
-              h5(strong("Taxonomic ranks", style = "color:black")),
+              h4(strong("Taxonomic ranks", style = "color:black")),
               p(" ", style = "margin-bottom: -10px;"),
               prettyRadioButtons("tax_rank", label = NULL,  animation = "jelly",
                                  c("Phylum - Genus (Default)", "Phylum - Species"), selected = "Phylum - Genus (Default)",
@@ -888,7 +884,7 @@ server = function(input, output, session){
         
         output$int_treat <- renderUI({
           tagList(
-            h5(strong("Treatment variable", style = "color:black")),
+            h4(strong("Treatment variable", style = "color:black")),
             p("A binary variable on the treatment status (e.g., placebo vs. drug, old drug vs. new drug).", style = "font-size:10pt"), 
             selectInput("treat_sel_int", label = NULL,
                         choices = sort(treat_vars_options), selected = "Treatment", width = '70%'))
@@ -918,7 +914,7 @@ server = function(input, output, session){
           output$int_cov <- renderUI({
             tagList(
               p(" ", style = "margin-top: 25px;"),
-              h5(strong("Covariate(s)", style = "color:black")),
+              h4(strong("Covariate(s)", style = "color:black")),
               p("Potential confounders (e.g., age, gender) to be adjusted for.", style = "font-size:10pt"),
               p(" ", style = "margin-bottom: +15px;"),
               prettyRadioButtons("int_covariate",label = NULL, 
@@ -951,7 +947,7 @@ server = function(input, output, session){
   ## 4. Causal Forest -------------------
   output$cf_format <- renderUI({
     tagList(
-      prettyRadioButtons("cf_dataType", label = h5(strong("Data format", style = "color:black")), icon = icon("check"), animation = "jelly",
+      prettyRadioButtons("cf_dataType", label = h4(strong("Data format", style = "color:black")), icon = icon("check"), animation = "jelly",
                          c("CLR (Default)", "Count (Rarefied)", "Proportion", "Arcsine-root"), selected = "CLR (Default)",width = '70%')
     )
   })
@@ -959,7 +955,7 @@ server = function(input, output, session){
   output$cf_response <- renderUI({
     tagList(
       p(" ", style = "margin-top: 25px;"),
-      h5(strong("Response variable", style = "color:black")),
+      h4(strong("Response variable", style = "color:black")),
       p("A binary or continuous variable on the post-treatment status of the patients’ health or disease.", style = "font-size:10pt"),
       p(" ", style = "margin-bottom: +15px;"),
       selectInput("cf_response", label = NULL, 
@@ -1000,7 +996,7 @@ server = function(input, output, session){
   output$cf_treat <- renderUI({
     tagList(
       p(" ", style = "margin-top: 25px;"),
-      h5(strong("Treatment variable", style = "color:black")),
+      h4(strong("Treatment variable", style = "color:black")),
       p("A binary variable on the primary treatment status (e.g,. placebo vs. treatment, old treatment vs. new treatment).", style = "font-size:10pt"),
       p(" ", style = "margin-bottom: +15px;"),
       selectInput("cf_treat", label = NULL, 
@@ -1037,7 +1033,7 @@ server = function(input, output, session){
   output$cf_method <- renderUI({
     tagList(
       p(" ", style = "margin-top: 25px;"),
-      h5(strong("Method", style = "color:black")),
+      h4(strong("Method", style = "color:black")),
       p("You can choose 'Double-sample tree' for a randomized controlled trial or 'Propensity tree' for an observational study.", style = "font-size:10pt"),
       p(" ", style = "margin-bottom: +15px;"),
       prettyRadioButtons(inputId = "cf_method",
@@ -1059,7 +1055,7 @@ server = function(input, output, session){
     output$cf_cov <- renderUI({
       tagList(
         p(" ", style = "margin-top: 25px;"),
-        h5(strong("Covariate(s)", style = "color:black")),
+        h4(strong("Covariate(s)", style = "color:black")),
         p("Potential confounders (e.g., age, gender) to be adjusted for.", style = "font-size:10pt"),
         p(" ", style = "margin-bottom: +15px;"),
         prettyRadioButtons("cf_cov",label = NULL, icon = icon("check"),
@@ -1083,7 +1079,7 @@ server = function(input, output, session){
     output$cf_tax_rank <- renderUI({
       tagList(
         p(" ", style = "margin-top: 25px;"),
-        h5(strong("Taxonomic ranks", style = "color:black")),
+        h4(strong("Taxonomic ranks", style = "color:black")),
         p("The taxonomic ranks to be surveyed. 'Phylum to Genus (Default)' for 16S rRNA amplicon sequencing; 'Phylum to Species' for shotgun metagenomic sequencing.", style = "font-size:10pt"),
         p(" ", style = "margin-bottom: +15px;"),
         prettyRadioButtons("cf_tax_rank", label = NULL, icon = icon("check"), animation = "jelly",
@@ -1094,7 +1090,7 @@ server = function(input, output, session){
     output$cf_num_taxa <- renderUI({
       tagList(
         p(" ", style = "margin-top: 25px;"),
-        h5(strong("# taxa to be displayed", style = "color:black")),
+        h4(strong("# taxa to be displayed", style = "color:black")),
         p("The maximum number of taxa to be displayed in variable importance and partial dependence plots (Default: 20).", style = "font-size:10pt"),
         p(" ", style = "margin-bottom: +15px;"),
         sliderInput("cf_num_taxa", label = NULL, min = 5, max = 20, value = 20, step = 5),
@@ -2906,4 +2902,3 @@ server = function(input, output, session){
     shinyjs::enable("cf_reference")
   })
 }
-

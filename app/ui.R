@@ -58,19 +58,19 @@ options(scipen=999)
                       taxa that enhance (or lower) the efficacy of the primary treatment. We also stress that MiCML 
                       can handle the data from either randomized controlled trials or observational studies. 
                       MiCML can be a useful analytic tool for microbiome-based personalized medicine to enhance patient 
-                      well-beings while lowering medical expenses.", style = "font-size:12pt")
+                      well-beings while lowering medical expenses.", style = "font-size:13pt")
   
   HOME_COMMENT = p(strong("Description:"), "MiCML is a web cloud computing platform for the comprehensive analysis of treatment effects using microbiome profiles. MiCML consists of three", strong("Data Processing"), "modules, (i) Data Input, (ii) Batch Effect Correction & Quality Control, and (iii) Data Transformation and three", strong("Data Analysis"), "modules, 
-                   (i) Descriptive Analysis, (ii) Generalized Linear Models, and (iii) Causal Machine Learning.", style = "font-size:12pt")
+                   (i) Descriptive Analysis, (ii) Generalized Linear Models, and (iii) Causal Machine Learning.", style = "font-size:13pt")
   
   HOME_COMMENT2 = p(strong("URLs:"), "Web server (online implementation):", tags$a(href = "http://micml.micloud.kr", "http://micml.micloud.kr"), 
                     "; GitHub repository (local implementation):", 
-                    tags$a(href = "https://github.com/hk1785/micmlgit", "https://github.com/hk1785/micmlgit"), style = "font-size:12pt")
+                    tags$a(href = "https://github.com/hk1785/micmlgit", "https://github.com/hk1785/micmlgit"), style = "font-size:13pt")
   
-  HOME_COMMENT3 = p(strong("Maintainers:"), "Hyunwook Koh (", tags$a(href = "hyunwook.koh@stonybrook.edu", "hyunwook.koh@stonybrook.edu"), ")", style = "font-size:12pt")
+  HOME_COMMENT3 = p(strong("Maintainers:"), "Hyunwook Koh (", tags$a(href = "hyunwook.koh@stonybrook.edu", "hyunwook.koh@stonybrook.edu"), ")", style = "font-size:13pt")
   
   HOME_COMMENT4 = p(strong("Reference:"), "Koh H, Kim J, Jang H. 
-                    A microbiome-based causal machine learning cloud platform for the analysis of treatment effects using microbial profiles on user-friendly web interfaces (Submitted)", style = "font-size:12pt")
+                    A microbiome-based causal machine learning cloud platform for the analysis of treatment effects using microbial profiles on user-friendly web interfaces (Submitted)", style = "font-size:13pt")
   
   INPUT_PHYLOSEQ_COMMENT1 = p(strong("Description:"), br(), br(), "This should be an '.rdata' or '.rds' file, and the data should be in 'phyloseq' format (see ", 
                               htmltools::a(tags$u("https://bioconductor.org/packages/release/bioc/html/phyloseq.html"), style = "color:red3"),
@@ -144,14 +144,10 @@ options(scipen=999)
                             Default is \"uncultured\", \"incertae\", \"Incertae\", \"unidentified\", \"unclassified\", \"unknown\".",
                             style = "font-size:11pt")
   
-  QC_BATCH_REFERENCE = p(h5(strong("ConQuR"), style = "margin-bottom: -15px"), br(),
-                         "Ling W, Lu J, Zhao N. et al. Batch effects removal for microbiome data via conditional quantile regression. Nat Commun. 2022;13(5418)", br(),
-                         h5(strong("PCoA"), style = "margin-bottom: -15px"), br(),
-                         "Torgerson WS. Multidimensional scaling: I. Theorey and method. Psychometrika. 1952;17:401-419.", br(),
-                         h5(strong("Bray-Curtis"), style = "margin-bottom: -15px"), br(),
-                         "Bray JR, Curtis JT. An ordination of the upland forest communities of southern Wisconsin. Ecol Monogr. 1957;27:325-349.", br(),
-                         h5(strong("CLR"), style = "margin-bottom: -15px"), br(),
-                         "Aitchison J. The statistical analysis of compositional data. J R Stat Soc Series B Stat Methodol. 1982;44(2):139-160.")
+  QC_BATCH_REFERENCE = p("1. Ling W, Lu J, Zhao N. et al. Batch effects removal for microbiome data via conditional quantile regression. Nat Commun. 2022;13(5418)", br(),
+                         "2. Torgerson WS. Multidimensional scaling: I. Theorey and method. Psychometrika. 1952;17:401-419.", br(),
+                         "3. Bray JR, Curtis JT. An ordination of the upland forest communities of southern Wisconsin. Ecol Monogr. 1957;27:325-349.", br(),
+                         "4. Aitchison J. The statistical analysis of compositional data. J R Stat Soc Series B Stat Methodol. 1982;44(2):139-160.")
   
   QC_BATCH_CONQUR_REFERENCE = p("1. Ling W, Lu J, Zhao N. et al. Batch effects removal for microbiome data via conditional quantile regression. Nat Commun. 2022;13(5418).", style = "font-size:11pt")
   
@@ -384,18 +380,20 @@ options(scipen=999)
       tabItems(
         
         ## Home -----
+        
         tabItem(tabName = "home",
                 div(id = "homepage", br(), HOME_COMMENT_MV, HOME_COMMENT, 
                     p(" ", style = "margin-bottom: 10px;"),
-                    div(tags$img(src="Home2.png", height = 450, width = 480), style = "text-align: center;"), br(),
+                    div(tags$img(src="Home2.png", height = 500, width = 540), style = "text-align: center;"), br(),
                     HOME_COMMENT2, HOME_COMMENT3, HOME_COMMENT4)),
         
         ## 0. DATA INPUT -----
+        
         tabItem(tabName = "step1", br(),
                 fluidRow(column(width = 6,
                                 box(width = NULL, status = "info", solidHeader = TRUE,
                                     title = strong("Data Input", style = "color:white"),
-                                    selectInput("inputOption", h5(strong("Data type")), 
+                                    selectInput("inputOption", h4(strong("Data type")), 
                                                 choices = c("Choose one" = "", "Phyloseq", "Individual Data"), width = '30%'),
                                     div(id = "optionsInfo", 
                                         tags$p("You can choose phyloseq or individual data.", style = "font-size:11pt"), 
@@ -416,7 +414,7 @@ options(scipen=999)
                                 box(
                                   width = NULL, status = "info", solidHeader = TRUE, 
                                   title = strong("Batch Effect Correction", style = "color:white"),
-                                  h5(strong("Batch effect correction?", style = "color:black")),
+                                  h4(strong("Batch effect correction?", style = "color:black")),
                                   p("Do you want to perform batch effect correction to balance the microbiome data across batches (e.g., labs, studies, locations, times) 
                                     while preserving the signals from other importanct primary and nuisance variables? (optional)", style = "font-size:10pt"),
                                   prettyRadioButtons("batch.yn", label = NULL,
@@ -433,17 +431,17 @@ options(scipen=999)
                                 box(
                                   width = NULL, status = "info", solidHeader = TRUE,
                                   title = strong("Quality Control", style = "color:white"),
-                                  textInput("kingdom", h5(strong("Kingdom")), value = "Bacteria"),
+                                  textInput("kingdom", h4(strong("Kingdom")), value = "Bacteria"),
                                   QC_KINGDOM_COMMENT,
                                   tags$style(type = 'text/css', '#slider1 .irs-grid-text {font-size: 1px}'),
                                   tags$style(type = 'text/css', '#slider2 .irs-grid-text {font-size: 1px}'),
                                   
-                                  sliderInput("slider1", h5(strong("Library size")), 
+                                  sliderInput("slider1", h4(strong("Library size")), 
                                               min=0, max=10000, value = 3000, step = 1000),
                                   QC_LIBRARY_SIZE_COMMENT1,
                                   QC_LIBRARY_SIZE_COMMENT2,
                                   
-                                  sliderInput("slider2", h5(strong("Mean proportion")), 
+                                  sliderInput("slider2", h4(strong("Mean proportion")), 
                                               min = 0, max = 0.1, value = 0.02, step = 0.001,  post  = " %"),
                                   QC_MEAN_PROP_COMMENT1,
                                   QC_MEAN_PROP_COMMENT2,
@@ -451,7 +449,7 @@ options(scipen=999)
                                   br(),
                                   p(" ", style = "margin-bottom: -20px;"),
                                   
-                                  h5(strong("Errors in taxonomic names")),
+                                  h4(strong("Errors in taxonomic names")),
                                   textInput("rem.str", label = "Complete match", value = ""),
                                   QC_TAXA_NAME_COMMENT1,
                                   
@@ -552,6 +550,7 @@ options(scipen=999)
                   ))),
         
         ## 3. Generalized Linear Models -----
+        
         tabItem(tabName = "glm", br(),
                 sidebarLayout(
                   sidebarPanel(width = 3,
@@ -576,6 +575,7 @@ options(scipen=999)
                   ))),
         
         ## 4. Causal Forest -----
+        
         tabItem(tabName = "causal_forest", br(),
                 sidebarLayout(
                   sidebarPanel(width = 3,
