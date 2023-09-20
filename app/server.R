@@ -178,6 +178,14 @@
 
 server = function(input, output, session){
   options(shiny.maxRequestSize = 30*1024^2)
+  source("setSliderColor.R")
+  source("MiDataProc.Data.Upload.R")
+  source("MiDataProc.Data.Input.R")
+  source("MiDataProc.Descriptive.R")
+  source("MiDataProc.GLM.R")
+  source("MiDataProc.Beta.Diversity.R")
+  source("MiDataProc.ML.Models.R")
+  source("MiDataProc.Causal.R")
   
   env <- new.env()
   nm <- load(file = "Data/Immuno.Metagenome.Char.Rdata", env)[1]
