@@ -1,7 +1,7 @@
 # COMMENTS ------
 
 {
-  TITLE = p("MiCML: Microbiome Causal Machine Learning for the Analysis of Treatment Effects Using Microbial Profiles", style = "font-size:16pt")
+  TITLE = p("MiCML: Microbiome-Based Causal Machine Learning for the Analysis of Treatment Effects Using Microbial Profiles", style = "font-size:16pt")
   HOME_COMMENT_MV = p(strong("Importance:"), "The treatment effects are heterogenous by patients due to the differences 
                       in their microbiomes, which in turn implies that we can enhance the treatment effect by manipulating 
                       the patient’s microbiome profile. Then, the coadministration of microbiome-based dietary 
@@ -30,7 +30,7 @@
   HOME_COMMENT3 = p(strong("Maintainers:"), "Hyunwook Koh (", tags$a(href = "hyunwook.koh@stonybrook.edu", "hyunwook.koh@stonybrook.edu"), ")", style = "font-size:12pt")
   
   HOME_COMMENT4 = p(strong("Reference:"), "Koh H, Kim J, Jang H. 
-                    Microbiome causal machine learning MiCML for the analysis of treatment effects using microbial profiles on user-friendly web environments (Submitted)", style = "font-size:12pt")
+                    A microbiome-based causal machine learning cloud platform for the analysis of treatment effects using microbial profiles on user-friendly web interfaces (Submitted)", style = "font-size:12pt")
   
   INPUT_PHYLOSEQ_COMMENT1 = p(strong("Description:"), br(), br(), "This should be an '.rdata' or '.rds' file, and the data should be in 'phyloseq' format (see ", 
                               htmltools::a(tags$u("https://bioconductor.org/packages/release/bioc/html/phyloseq.html"), style = "color:red3"),
@@ -346,9 +346,11 @@ server = function(input, output, session){
           data <- e[[name]]
           
           otu.tab <- otu_table(data, taxa_are_rows = TRUE)
+          tax.tab <- tax_table(data)
+          sam.dat <- sample_data(data)
           tree <- rtree(nrow(otu.tab))
           tree$tip.label <- rownames(otu.tab)
-          data <- merge_phyloseq(data, tree)
+          data <- merge_phyloseq(otu.tab, tax.tab, sam.dat, tree)
           
           if (sum(sapply(sample_data(data),is.factor))!=0) {
             sample_data(data)[,which(sapply(sample_data(data), is.factor))] = lapply(sample_data(data)[,which(sapply(sample_data(data), is.factor))], as.character)

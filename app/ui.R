@@ -40,7 +40,7 @@ options(scipen=999)
 # COMMENTS ------
 
 {
-  TITLE = p("MiCML: Microbiome Causal Machine Learning for the Analysis of Treatment Effects Using Microbial Profiles", style = "font-size:16pt")
+  TITLE = p("MiCML: Microbiome-Based Causal Machine Learning for the Analysis of Treatment Effects Using Microbial Profiles", style = "font-size:16pt")
   HOME_COMMENT_MV = p(strong("Importance:"), "The treatment effects are heterogenous by patients due to the differences 
                       in their microbiomes, which in turn implies that we can enhance the treatment effect by manipulating 
                       the patient’s microbiome profile. Then, the coadministration of microbiome-based dietary 
@@ -69,7 +69,7 @@ options(scipen=999)
   HOME_COMMENT3 = p(strong("Maintainers:"), "Hyunwook Koh (", tags$a(href = "hyunwook.koh@stonybrook.edu", "hyunwook.koh@stonybrook.edu"), ")", style = "font-size:12pt")
   
   HOME_COMMENT4 = p(strong("Reference:"), "Koh H, Kim J, Jang H. 
-                    Microbiome causal machine learning MiCML for the analysis of treatment effects using microbial profiles on user-friendly web environments (Submitted)", style = "font-size:12pt")
+                    A microbiome-based causal machine learning cloud platform for the analysis of treatment effects using microbial profiles on user-friendly web interfaces (Submitted)", style = "font-size:12pt")
   
   INPUT_PHYLOSEQ_COMMENT1 = p(strong("Description:"), br(), br(), "This should be an '.rdata' or '.rds' file, and the data should be in 'phyloseq' format (see ", 
                               htmltools::a(tags$u("https://bioconductor.org/packages/release/bioc/html/phyloseq.html"), style = "color:red3"),
