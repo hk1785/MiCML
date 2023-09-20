@@ -37,8 +37,8 @@ RUN R -e "remotes::install_github('joey711/biomformat')"
 RUN R -e "remotes::install_github('jcrodriguez1989/chatgpt')"
 RUN R -e "remotes::install_github('zmjones/edarf', subdir = 'pkg')"
 RUN R -e "remotes::install_github('nik01010/dashboardthemes', force = TRUE)"
-RUN R -e "remotes::install_github('hk1785/MiVT', force = TRUE)
-RUN R -e "remotes::install_github('Zhiwen-Owen-Jiang/MiRKATMC', force = TRUE)
+RUN R -e "remotes::install_github('hk1785/MiVT', force = TRUE)"
+RUN R -e "remotes::install_github('Zhiwen-Owen-Jiang/MiRKATMC', force = TRUE)"
 RUN R -e "BiocManager::install('sva')"
 
 RUN mkdir /root/app
