@@ -1218,7 +1218,7 @@ server = function(input, output, session){
             set.seed(578)
             adjusted.otu.tab <- ConQuR(tax_tab = otu.tab, batchid = batchid,
                                        covariates = covar, batch_ref = ref.bat,
-                                       logistic_lasso = T, quantile_type = "lasso", interplt = T, num_core = 2)
+                                       logistic_lasso = T, quantile_type = "lasso", interplt = T, num_core = 1)
             bat.otu.tab <- otu_table(t(as.data.frame(as.matrix(adjusted.otu.tab))), taxa_are_rows = TRUE)
           }
           else{
