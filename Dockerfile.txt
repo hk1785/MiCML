@@ -28,24 +28,22 @@ RUN apt-get update && apt-get install -y \
     libmpfr-dev \
     && rm -rf /var/lib/apt/lists/*
 
-RUN R -e "install.packages(c('shiny', 'BiocManager', 'rmarkdown', 'seqinr', 'shinydashboard', 'tidyverse', 'plotly', 'shinyWidgets', 
-'shinyjs', 'googleVis', 'xtable', 'DT', 'htmltools', 'phangorn', 'bios2mds', 'zip', 'ape', 'zCompositions', 
-'compositions', 'stringr', 'caret', 'ggplot2', 'data.table', 'fontawesome', 'grid', 'ggplotify', 
-'remotes', 'doParallel', 'reshape2', 'fossil', 'MiRKAT', 'proxy', 'ecodist', 'GUniFrac', 'picante', 
-'randomForest', 'grf', 'rpart', 'rpart.plot', 'vegan'), repos='https://cloud.r-project.org/')"
+RUN R -e "install.packages(c('ape', 'bios2mds', 'BiocManager', 'caret', 'compositions', 'data.table', 'doParallel', 'DT', 'ecodist', 'fontawesome', 'fossil', 
+'ggplot2', 'grid', 'ggplotify', 'googleVis', 'grf', 'GUniFrac', 
+'htmltools', 'MiRKAT', 'picante', 'plotly', 'phangorn', 'proxy', 'rmarkdown', 'randomForest', 'remotes', 'rpart', 'rpart.plot', 'reshape2', 
+'seqinr', 'shinydashboard', 'shiny', 'shinyWidgets', 'shinyjs', 'stringr', 'tidyverse', 
+'vegan', 'VGAM', 'xtable', 'zip', 'zCompositions'), repos='https://cloud.r-project.org/')"
 
+RUN R -e "remotes::install_github('prise6/aVirtualTwins', build_vignettes = TRUE)"
+RUN R -e "remotes::install_github('wdl2459/ConQuR')
 RUN R -e "BiocManager::install('phyloseq')"
-RUN R -e "BiocManager::install('sva')"
-
 RUN R -e "remotes::install_github('joey711/biomformat')"
-RUN R -e "remotes::install_github('nik01010/dashboardthemes', force = TRUE)"
 RUN R -e "remotes::install_github('jcrodriguez1989/chatgpt')"
 RUN R -e "remotes::install_github('zmjones/edarf', subdir = 'pkg')"
-
-RUN R -e "remotes::install_github('wdl2459/ConQuR')
-RUN R -e "remotes::install_github('prise6/aVirtualTwins', build_vignettes = TRUE)"
+RUN R -e "remotes::install_github('nik01010/dashboardthemes', force = TRUE)"
 RUN R -e "remotes::install_github('hk1785/MiVT', force = TRUE)
 RUN R -e "remotes::install_github('Zhiwen-Owen-Jiang/MiRKATMC', force = TRUE)
+RUN R -e "BiocManager::install('sva')"
 
 RUN mkdir /root/app
 COPY app /root/app
