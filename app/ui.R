@@ -26,6 +26,8 @@ library(ggplotify)
 library(remotes)
 library(doParallel)
 library(MiRKATMC)
+library(ConQuR)
+library(dashboardthemes)
 
 source("setSliderColor.R")
 source("MiDataProc.Data.Upload.R")
