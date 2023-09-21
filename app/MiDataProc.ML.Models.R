@@ -1,7 +1,3 @@
-library(stringr)
-library(chatgpt)
-library(VGAM)
-
 # Essentials ----------------
 
 colnames.to.ind <- function(data){ # data list containing phylum ~ species datasets

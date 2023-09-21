@@ -1,6 +1,3 @@
-library(biomformat)
-library(phangorn)
-
 preprocess.tax.tab = function(tax.tab){
   trans.tax.tab <- matrix(NA, nrow(tax.tab), 7)
   tax.list <- strsplit(as.character(tax.tab$Taxon), ";")

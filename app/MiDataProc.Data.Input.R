@@ -1,15 +1,3 @@
-library(phyloseq)
-library(ape)
-library(phangorn)
-library(zCompositions)
-library(compositions)
-library(stringr)
-library(fossil)
-library(picante)
-library(ecodist)
-library(GUniFrac)
-library(MiRKAT)
-
 # Quality Control -----------
 rem.tax.d <- c("", "metagenome", "gut metagenome", "mouse gut metagenome")
 rem.tax.str.d <- c("uncultured", "incertae", "Incertae", "unidentified", "unclassified", "unknown")

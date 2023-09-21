@@ -1404,6 +1404,7 @@ server = function(input, output, session){
           
           incProgress(3/10, message = "Rarefying in progress")
           lib_size.sum = lib.size.func(infile$qc_biom)$lib.size.sum
+          set.seed(521)
           infile$rare_biom = rarefy.func(infile$qc_biom, 
                                          cut.off = lib_size.sum["Minimum"],
                                          multi.rarefy = 1,
@@ -2602,11 +2603,13 @@ server = function(input, output, session){
             
             # Step 3. BoRT
             # incProgress(1/40, message = paste0(str_to_title(name), ": BoRT in progress"))
-            step3.result <- try(bort.func(step2.result, name, n.tree = 10000), silent = TRUE)
+            set.seed(521)
+            step3.result <- try(bort.func(step2.result, name, n.tree = 100), silent = TRUE)
             
             # Step 4. Treatment Effect Prediction (randomForest)
             incProgress(1/40, message = paste0(str_to_title(name), ": Treatment Effect Prediction in progress"))
-            step4.result <- try(bort.treatment.pred(step2.result, name, n.tree = 10000), silent = TRUE)
+            set.seed(521)
+            step4.result <- try(bort.treatment.pred(step2.result, name, n.tree = 100), silent = TRUE)
             
             dt.fit.list[[name]] <- step2.result$best.dt.fit
             # bort.out.list[[name]] <- step3.result$BoRT.out
@@ -2721,13 +2724,13 @@ server = function(input, output, session){
             # Step 3. BoRT
             
             set.seed(521)
-            step3.result <- try(bort.func(step2.result, name, n.tree = 10000), silent = TRUE)
+            step3.result <- try(bort.func(step2.result, name, n.tree = 100), silent = TRUE)
             
             # Step 4. Treatment Effect Prediction (randomForest)
             
             incProgress(1/40, message = paste0(str_to_title(name), ": Treatment Effect Prediction in progress"))
             set.seed(521)
-            step4.result <- try(bort.treatment.pred(step2.result, name, n.tree = 10000), silent = TRUE)
+            step4.result <- try(bort.treatment.pred(step2.result, name, n.tree = 100), silent = TRUE)
             
             dt.fit.list[[name]] <- step2.result$best.dt.fit
             
