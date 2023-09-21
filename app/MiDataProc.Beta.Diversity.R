@@ -6,8 +6,8 @@ library(MiRKAT)
 library(MiRKATMC)
 library(vegan)
 
-source("Source/MiDataProc.Data.Input.R")
-source("Source/MiDataProc.Data.Upload.R")
+source("MiDataProc.Data.Input.R")
+source("MiDataProc.Data.Upload.R")
 
 # MiRKATMC ----------------------
 Ds.Ks.func <- function(rare.biom, biom.after.qc, is.tree) {
