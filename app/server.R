@@ -109,9 +109,9 @@
                          "3. Bray JR, Curtis JT. An ordination of the upland forest communities of southern Wisconsin. Ecol Monogr. 1957;27:325-349.", br(),
                          "4. Aitchison J. The statistical analysis of compositional data. J R Stat Soc Series B Stat Methodol. 1982;44(2):139-160.")
   
-  QC_BATCH_CONQUR_REFERENCE = p("1. Ling W, Lu J, Zhao N. et al. Batch effects removal for microbiome data via conditional quantile regression. Nat Commun. 2022;13(5418).", style = "font-size:11pt")
+  QC_BATCH_CONQUR_REFERENCE = p("Ling W, Lu J, Zhao N. et al. Batch effects removal for microbiome data via conditional quantile regression. Nat Commun. 2022;13(5418).", style = "font-size:11pt")
   
-  QC_BATCH_COMBAT_REFERENCE = p("1. Zhang Y. et al. ComBat-seq: batch effect adjustments for RNA-seq count data. NAR Genom Bioinform. 2020;2(3)lqaa078", style = "font-size:11pt")
+  QC_BATCH_COMBAT_REFERENCE = p("Zhang Y. et al. ComBat-seq: batch effect adjustments for RNA-seq count data. NAR Genom Bioinform. 2020;2(3)lqaa078", style = "font-size:11pt")
   
   DATA_TRANSFORM_COMMENT = p("Transform the data into four different formats (1) CLR (centered log ratio) (Aitchison, 1982), (2) Count (Rarefied) (Sanders, 1968), (3) Proportion, (4) Arcsine-root 
                              for each taxonomic rank (phylum, class, order, familiy, genus, species).")
@@ -647,8 +647,8 @@ server = function(input, output, session){
           prettyRadioButtons("batch.method", 
                              label = h4(strong("Method", style = "color:black")), 
                              animation = "jelly",
-                             choices = c("ConQur"), 
-                             selected = "ConQur", 
+                             choices = c("ConQuR"), 
+                             selected = "ConQuR", 
                              icon = icon("check"), 
                              width = '80%')
         )
@@ -661,8 +661,8 @@ server = function(input, output, session){
           p("A variable for batch IDs (e.g., labs, studies, states, locations, times)", style = "font-size:10pt"),
           p(" ", style = "margin-bottom: +15px;"),
           selectInput("batch.var", label = NULL,
-                      choices = c(bmc.col.check(sample_data(infile$biom), type = "Binary"), bmc.col.check(sample_data(infile$biom), type = "Multinomial")),
-                      selected = c(bmc.col.check(sample_data(infile$biom), type = "Binary"), bmc.col.check(sample_data(infile$biom), type = "Multinomial"))[1],
+                      choices = c(bmc.col.check(sample_data(infile$biom), type = "Multinomial"), bmc.col.check(sample_data(infile$biom), type = "Binary")),
+                      selected = c(bmc.col.check(sample_data(infile$biom), type = "Multinomial"), bmc.col.check(sample_data(infile$biom), type = "Binary"))[1],
                       width = '70%')
         )
       })
@@ -1178,7 +1178,7 @@ server = function(input, output, session){
           remain.samples <- sam.dat[,c(input$batch.var, input$prim.var, input$covar)] %>% na.omit %>% rownames
           
           infile$na_omit_biom <- prune_samples(remain.samples, infile$qc_biom)
-          if(input$batch.method == "ConQur"){
+          if(input$batch.method == "ConQuR"){
             otu.tab <- as.data.frame(t(otu_table(infile$na_omit_biom)))
           } else {
             otu.tab <- as.matrix(otu_table(infile$na_omit_biom))
@@ -1191,19 +1191,18 @@ server = function(input, output, session){
           batchid <<- as.factor(sam.dat[[input$batch.var]])
           
           prim.var <- input$prim.var
-          if(!is.null(input$covar)){
+          if (!is.null(input$covar)) {
             cov <- input$covar
             df <- data.frame(sam.dat[,prim.var], sam.dat[,cov])
           } else {
             df <- data.frame(sam.dat[,prim.var])
           }
           
-          for(name in colnames(df)){
+          for (name in colnames(df)) {
             type <- col.str.check(sam.dat, name)
-            if(type == "factor"){
+            if (type == "factor") {
               df[[name]] <- as.factor(df[[name]])
-            }
-            else if(type == "numeric"){
+            } else if (type == "numeric"){
               df[[name]] <- as.numeric(df[[name]])
             } else {
               df[[name]] <- df[[name]]
@@ -1213,16 +1212,15 @@ server = function(input, output, session){
           f1 <- as.formula(paste("~" ,paste(names(df), collapse = "+"), collapse = ""))
           covar <- model.matrix(f1, data = df)[,-1]
           
-          if(input$batch.method == "ConQur"){
+          if (input$batch.method == "ConQuR") {
             ref.bat <- names(which.max(table(batchid)))
-            set.seed(578)
+            set.seed(521)
             adjusted.otu.tab <- ConQuR(tax_tab = otu.tab, batchid = batchid,
                                        covariates = covar, batch_ref = ref.bat,
                                        logistic_lasso = T, quantile_type = "lasso", interplt = T, num_core = 1)
             bat.otu.tab <- otu_table(t(as.data.frame(as.matrix(adjusted.otu.tab))), taxa_are_rows = TRUE)
-          }
-          else{
-            set.seed(578)
+          } else {
+            set.seed(521)
             adjusted.otu.tab <- sva::ComBat_seq(otu.tab, batch=batchid, group=NULL, covar_mod = covar)
             bat.otu.tab <- otu_table(as.data.frame(as.matrix(adjusted.otu.tab)), taxa_are_rows = TRUE)
           }
@@ -1238,6 +1236,7 @@ server = function(input, output, session){
           
           # Rarefying original biom data
           lib_size.sum = lib.size.func(infile$qc_biom)$lib.size.sum
+          set.seed(521)
           infile$rare_biom = rarefy.func(infile$qc_biom, 
                                          cut.off = lib_size.sum["Minimum"],
                                          multi.rarefy = 1,
@@ -1250,6 +1249,7 @@ server = function(input, output, session){
                                                 tree.exists = tree.exists)
           
           lib_size.sum = lib.size.func(batch.infile$qc_biom)$lib.size.sum
+          set.seed(521)
           batch.infile$rare_biom <- rarefy.func(batch.infile$qc_biom,
                                                 cut.off = lib_size.sum["Minimum"],
                                                 multi.rarefy = 1,
@@ -2592,7 +2592,8 @@ server = function(input, output, session){
           
           # Step 1. Treatment Effect Prediction
           incProgress(1/20, message = "Double Sample Tree: Treatment Effect Prediction in progress")
-          step1.result <- try(double.sample.treatment.pred(Feature, Response, Treatment, n.tree = 10000), silent = TRUE)
+          set.seed(521)
+          step1.result <- try(double.sample.treatment.pred(Feature, Response, Treatment, n.tree = 20000), silent = TRUE)
           
           for(name in level.names){
             # Step 2. Subgroup Identification
@@ -2702,14 +2703,16 @@ server = function(input, output, session){
             Covariate <- model.matrix(f1, data = df)[,-1]
             
             incProgress(1/20, message = "Propensity Tree with Covariate(s): Treatment Effect Prediction in progress")
-            step1.result <- try(propensity.treatment.pred(Feature, Response, Treatment, Covariate, n.tree = 10000), silent = TRUE)
+            set.seed(521)
+            step1.result <- try(propensity.treatment.pred(Feature, Response, Treatment, Covariate, n.tree = 20000), silent = TRUE)
           }
           
           # Step 1-2. Treatment Effect Prediction without Covariate
           
           else {
             incProgress(1/20, message = "Propensity Tree without Covariate: Treatment Effect Prediction in progress")
-            step1.result <- try(propensity.treatment.pred(Feature, Response, Treatment, n.tree = 10000), silent = TRUE)
+            set.seed(521)
+            step1.result <- try(propensity.treatment.pred(Feature, Response, Treatment, n.tree = 20000), silent = TRUE)
           }
           
           for(name in level.names){

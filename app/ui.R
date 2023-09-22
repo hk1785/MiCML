@@ -171,9 +171,9 @@ options(scipen=999)
                          "3. Bray JR, Curtis JT. An ordination of the upland forest communities of southern Wisconsin. Ecol Monogr. 1957;27:325-349.", br(),
                          "4. Aitchison J. The statistical analysis of compositional data. J R Stat Soc Series B Stat Methodol. 1982;44(2):139-160.")
   
-  QC_BATCH_CONQUR_REFERENCE = p("1. Ling W, Lu J, Zhao N. et al. Batch effects removal for microbiome data via conditional quantile regression. Nat Commun. 2022;13(5418).", style = "font-size:11pt")
+  QC_BATCH_CONQUR_REFERENCE = p("Ling W, Lu J, Zhao N. et al. Batch effects removal for microbiome data via conditional quantile regression. Nat Commun. 2022;13(5418).", style = "font-size:11pt")
   
-  QC_BATCH_COMBAT_REFERENCE = p("1. Zhang Y. et al. ComBat-seq: batch effect adjustments for RNA-seq count data. NAR Genom Bioinform. 2020;2(3)lqaa078", style = "font-size:11pt")
+  QC_BATCH_COMBAT_REFERENCE = p("Zhang Y. et al. ComBat-seq: batch effect adjustments for RNA-seq count data. NAR Genom Bioinform. 2020;2(3)lqaa078", style = "font-size:11pt")
   
   DATA_TRANSFORM_COMMENT = p("Transform the data into four different formats (1) CLR (centered log ratio) (Aitchison, 1982), (2) Count (Rarefied) (Sanders, 1968), (3) Proportion, (4) Arcsine-root 
                              for each taxonomic rank (phylum, class, order, familiy, genus, species).")
