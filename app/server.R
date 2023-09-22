@@ -1236,7 +1236,6 @@ server = function(input, output, session){
           
           # Rarefying original biom data
           lib_size.sum = lib.size.func(infile$qc_biom)$lib.size.sum
-          set.seed(517)
           infile$rare_biom = rarefy.func(infile$qc_biom, 
                                          cut.off = lib_size.sum["Minimum"],
                                          multi.rarefy = 1,
@@ -1249,7 +1248,6 @@ server = function(input, output, session){
                                                 tree.exists = tree.exists)
           
           lib_size.sum = lib.size.func(batch.infile$qc_biom)$lib.size.sum
-          set.seed(517)
           batch.infile$rare_biom <- rarefy.func(batch.infile$qc_biom,
                                                 cut.off = lib_size.sum["Minimum"],
                                                 multi.rarefy = 1,
@@ -1404,7 +1402,6 @@ server = function(input, output, session){
           
           incProgress(3/10, message = "Rarefying in progress")
           lib_size.sum = lib.size.func(infile$qc_biom)$lib.size.sum
-          set.seed(517)
           infile$rare_biom = rarefy.func(infile$qc_biom, 
                                          cut.off = lib_size.sum["Minimum"],
                                          multi.rarefy = 1,
@@ -2593,7 +2590,7 @@ server = function(input, output, session){
           # Step 1. Treatment Effect Prediction
           incProgress(1/20, message = "Double Sample Tree: Treatment Effect Prediction in progress")
           set.seed(517)
-          step1.result <- try(double.sample.treatment.pred(Feature, Response, Treatment, n.tree = 20000), silent = TRUE)
+          step1.result <- try(double.sample.treatment.pred(Feature, Response, Treatment, n.tree = 15000), silent = TRUE)
           
           for(name in level.names){
             # Step 2. Subgroup Identification
@@ -2704,7 +2701,7 @@ server = function(input, output, session){
             
             incProgress(1/20, message = "Propensity Tree with Covariate(s): Treatment Effect Prediction in progress")
             set.seed(517)
-            step1.result <- try(propensity.treatment.pred(Feature, Response, Treatment, Covariate, n.tree = 20000), silent = TRUE)
+            step1.result <- try(propensity.treatment.pred(Feature, Response, Treatment, Covariate, n.tree = 15000), silent = TRUE)
           }
           
           # Step 1-2. Treatment Effect Prediction without Covariate
@@ -2712,7 +2709,7 @@ server = function(input, output, session){
           else {
             incProgress(1/20, message = "Propensity Tree without Covariate: Treatment Effect Prediction in progress")
             set.seed(517)
-            step1.result <- try(propensity.treatment.pred(Feature, Response, Treatment, n.tree = 20000), silent = TRUE)
+            step1.result <- try(propensity.treatment.pred(Feature, Response, Treatment, n.tree = 15000), silent = TRUE)
           }
           
           for(name in level.names){
