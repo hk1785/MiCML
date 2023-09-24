@@ -106,7 +106,7 @@ options(scipen=999)
   
   HOME_COMMENT2 = p(strong("URLs:"), "Web server (online implementation):", tags$a(href = "http://micml.micloud.kr", "http://micml.micloud.kr"), 
                     "; GitHub repository (local implementation):", 
-                    tags$a(href = "https://github.com/hk1785/micmlgit", "https://github.com/hk1785/micmlgit"), style = "font-size:13pt")
+                    tags$a(href = "https://github.com/hk1785/micml", "https://github.com/hk1785/micml"), style = "font-size:13pt")
   
   HOME_COMMENT3 = p(strong("Maintainers:"), "Hyunwook Koh (", tags$a(href = "hyunwook.koh@stonybrook.edu", "hyunwook.koh@stonybrook.edu"), ")", style = "font-size:13pt")
   
