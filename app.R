@@ -1,3 +1,84 @@
+ls.pkg <- c('shiny', 'BiocManager', 'rmarkdown', 'seqinr', 'shinydashboard', 'tidyverse', 'plotly', 'shinyWidgets', 
+            'shinyjs', 'googleVis', 'xtable', 'DT', 'htmltools', 'phangorn', 'bios2mds', 'zip', 'ape', 'zCompositions', 
+            'compositions', 'stringr', 'caret', 'ggplot2', 'data.table', 'fontawesome', 'grid', 'ggplotify', 
+            'remotes', 'doParallel', 'reshape2', 'fossil', 'MiRKAT', 'proxy', 'ecodist', 'GUniFrac', 'picante', 'randomForest', 'grf', 'rpart', 'rpart.plot', 'vegan', 'VGAM')
+
+new.pkg <- ls.pkg[!(ls.pkg %in% installed.packages()[,"Package"])]
+if(length(new.pkg)) install.packages(new.pkg, repos = 'https://cloud.r-project.org/')
+
+if(!require('phyloseq')) BiocManager::install('phyloseq')
+if(!require('biomformat')) remotes::install_github('joey711/biomformat')
+if(!require('dashboardthemes')) remotes::install_github('nik01010/dashboardthemes', force = TRUE)
+if(!require('chatgpt')) remotes::install_github('jcrodriguez1989/chatgpt')
+if(!require('edarf')) remotes::install_github('zmjones/edarf', subdir = 'pkg')
+if(!require('ConQuR')) remotes::install_github('wdl2459/ConQuR', force = TRUE)
+if(!require('sva')) BiocManager::install('sva')
+if(!require('aVirtualTwins')) remotes::install_github("prise6/aVirtualTwins", build_vignettes = TRUE)
+if(!require('MiVT')) remotes::install_github("hk1785/MiVT", force = TRUE)
+if(!require('MiRKATMC')) remotes::install_github("Zhiwen-Owen-Jiang/MiRKATMC")
+
+library(aVirtualTwins)
+library(ape)
+library(bios2mds)
+library(BiocManager)
+library(biomformat)
+library(chatgpt)
+library(ConQuR)
+library(compositions)
+library(caret)
+library(doParallel)
+library(dashboardthemes)
+library(DT)
+library(data.table)
+library(dplyr)
+library(ecodist)
+library(edarf)
+library(fontawesome)
+library(fossil)
+library(googleVis)
+library(ggplot2)
+library(grid)
+library(grf)
+library(ggplotify)
+library(GUniFrac)
+library(htmltools)
+library(MiRKAT)
+library(MiRKATMC)
+library(MiVT)
+library(plotly)
+library(phangorn)
+library(phyloseq)
+library(proxy)
+library(picante)
+library(remotes)
+library(rpart)
+library(rpart.plot)
+library(randomForest)
+library(reshape2)
+library(stringr)
+library(shiny)
+library(seqinr)
+library(shinydashboard)
+library(shinyWidgets)
+library(shinyjs)
+library(tidyverse)
+library(vegan)
+library(VGAM)
+library(xtable)
+library(zCompositions)
+library(zip)
+
+source("Source/setSliderColor.R")
+source("Source/MiDataProc.Data.Upload.R")
+source("Source/MiDataProc.Data.Input.R")
+source("Source/MiDataProc.Descriptive.R")
+source("Source/MiDataProc.GLM.R")
+source("Source/MiDataProc.Beta.Diversity.R")
+source("Source/MiDataProc.ML.Models.R")
+source("Source/MiDataProc.Causal.R")
+
+options(scipen=999)
+
 # COMMENTS ------
 
 {
@@ -30,7 +111,7 @@
   HOME_COMMENT3 = p(strong("Maintainers:"), "Hyunwook Koh (", tags$a(href = "hyunwook.koh@stonybrook.edu", "hyunwook.koh@stonybrook.edu"), ")", style = "font-size:13pt")
   
   HOME_COMMENT4 = p(strong("Reference:"), "Koh H, Kim J, Jang H. 
-                    A microbiome-based causal machine learning cloud platform for the analysis of treatment effects using microbial profiles on user-friendly web interfaces (Submitted)", style = "font-size:13pt")
+                    A microbiome-based causal machine learning cloud platform for the analysis of treatment effects using microbial profiles (Under review)", style = "font-size:13pt")
   
   INPUT_PHYLOSEQ_COMMENT1 = p(strong("Description:"), br(), br(), "This should be an '.rdata' or '.rds' file, and the data should be in 'phyloseq' format (see ", 
                               htmltools::a(tags$u("https://bioconductor.org/packages/release/bioc/html/phyloseq.html"), style = "color:red3"),
@@ -174,18 +255,397 @@
                    "4. Hirano K, Imbens GW, Rider G. Efficient estimation of average treatment effects using the estimated propensity score. Econometrica. 2003;71:1161-1189.")
 }
 
+# UI ---------------------------------------------------------------------------
+
+{
+  ui = dashboardPage(
+    title = "MiCML",
+    dashboardHeader(title = span(TITLE, style = "float:left;font-size: 20px"), titleWidth = "100%"),
+    dashboardSidebar(
+      tags$script(JS("document.getElementsByClassName('sidebar-toggle')[0].style.visibility = 'hidden';")),
+      sidebarMenu(id = "side_menu",
+                  
+                  menuItem("Home", tabName = "home"),
+                  
+                  menuItem("Data Processing",
+                           menuSubItem("Data Input", tabName = "step1", 
+                                       icon = fontawesome::fa("upload", margin_left = "0.3em", margin_right = "0.1em")),
+                           menuSubItem(span(span("Batch Effect Correction /", br()), 
+                                            span("Quality Control", style = "margin-left: 23px")), tabName = "step2", 
+                                       icon = fontawesome::fa("chart-bar", margin_left = "0.3em")),
+                           menuSubItem("Data Transformation", tabName = "divdtCalculation", 
+                                       icon = fontawesome::fa("calculator", margin_left = "0.3em", margin_right = "0.25em"))
+                  ),
+                  
+                  menuItem("Data Analysis",
+                           menuSubItem("Descriptive", tabName = "descriptive", 
+                                       icon = fontawesome::fa("chart-simple", margin_right = "0.1em")),
+                           menuSubItem("Generalized Linear Models", tabName = "glm", 
+                                       icon = fontawesome::fa("chart-line", margin_right = "0em")),
+                           menuSubItem("Causal Machine Learning", tabName = "causal_forest", 
+                                       icon = fontawesome::fa("tree", margin_right = "0.1em"))
+                  )
+      )
+    ),
+    
+    dashboardBody(
+      
+      # Custom Theme -----
+      
+      shinyDashboardThemeDIY(
+        
+        # general
+        appFontFamily = "Arial"
+        ,appFontColor = "rgb(0,0,0)"
+        ,primaryFontColor = "rgb(0,0,0)"
+        ,infoFontColor = "rgb(0,0,0)"
+        ,successFontColor = "rgb(0,0,0)"
+        ,warningFontColor = "rgb(0,0,0)"
+        ,dangerFontColor = "rgb(0,0,0)"
+        ,bodyBackColor = "rgb(255,255,255)"
+        
+        # header
+        ,logoBackColor = "rgb(230, 70, 50)"
+        
+        ,headerButtonBackColor = "rgb(230, 70, 50)"
+        ,headerButtonIconColor = "rgb(230, 70, 50)"
+        ,headerButtonBackColorHover = "rgb(230, 70, 50)"
+        ,headerButtonIconColorHover = "rgb(0,0,0)"
+        
+        ,headerBackColor = "rgb(230, 70, 50)"
+        ,headerBoxShadowColor = "#aaaaaa"
+        ,headerBoxShadowSize = "0px 0px 0px"
+        
+        # sidebar
+        ,sidebarBackColor = "rgb(24,31,41)"
+        ,sidebarPadding = 0
+        
+        ,sidebarMenuBackColor = "transparent"
+        ,sidebarMenuPadding = 0
+        ,sidebarMenuBorderRadius = 0
+        
+        ,sidebarShadowRadius = ""
+        ,sidebarShadowColor = "0px 0px 0px"
+        
+        ,sidebarUserTextColor = "rgb(24,31,41)"
+        
+        ,sidebarSearchBackColor = "rgb(255, 255, 255)"
+        ,sidebarSearchIconColor = "rgb(24,31,41)"
+        ,sidebarSearchBorderColor = "rgb(24,31,41)"
+        
+        ,sidebarTabTextColor = "rgb(210,210,210)"
+        ,sidebarTabTextSize = 14
+        ,sidebarTabBorderStyle = "none"
+        ,sidebarTabBorderColor = "none"
+        ,sidebarTabBorderWidth = 0
+        
+        ,sidebarTabBackColorSelected = "rgb(45,52,63)"
+        ,sidebarTabTextColorSelected = "rgb(252,255,255)"
+        ,sidebarTabRadiusSelected = "0px"
+        
+        ,sidebarTabBackColorHover = "rgb(67,75,86)"
+        ,sidebarTabTextColorHover = "rgb(252,255,255)"
+        ,sidebarTabBorderStyleHover = "none"
+        ,sidebarTabBorderColorHover = "none"
+        ,sidebarTabBorderWidthHover = 0
+        ,sidebarTabRadiusHover = "0px"
+        
+        # boxes
+        ,boxBackColor = "rgb(245,245,245)"
+        ,boxBorderRadius = 3
+        ,boxShadowSize = "0px 0px 0px"
+        ,boxShadowColor = "rgba(0,0,0,0)"
+        ,boxTitleSize = 16
+        ,boxDefaultColor = "rgb(210,214,220)"
+        ,boxPrimaryColor = "rgb(35, 49, 64)"
+        ,boxInfoColor = "rgb(230, 70, 50)"
+        ,boxSuccessColor = "rgb(112,173,71)"
+        ,boxWarningColor = "rgb(244,156,104)"
+        ,boxDangerColor = "rgb(255,88,55)"
+        
+        ,tabBoxTabColor = "rgb(255,255,255)"
+        ,tabBoxTabTextSize = 14
+        ,tabBoxTabTextColor = "rgb(0,0,0)"
+        ,tabBoxTabTextColorSelected = "rgb(35, 49, 64)"
+        ,tabBoxBackColor = "rgb(255,255,255)"
+        ,tabBoxHighlightColor = "rgb(230, 70, 50)"
+        ,tabBoxBorderRadius = 0
+        
+        # inputs
+        ,buttonBackColor = "rgb(245,245,245)"
+        ,buttonTextColor = "rgb(0,0,0)"
+        ,buttonBorderColor = "rgb(24,31,41)"
+        ,buttonBorderRadius = 3
+        
+        ,buttonBackColorHover = "rgb(227,227,227)"
+        ,buttonTextColorHover = "rgb(100,100,100)"
+        ,buttonBorderColorHover = "rgb(200,200,200)"
+        
+        ,textboxBackColor = "rgb(255,255,255)"
+        ,textboxBorderColor = "rgb(200,200,200)"
+        ,textboxBorderRadius = 0
+        ,textboxBackColorSelect = "rgb(245,245,245)"
+        ,textboxBorderColorSelect = "rgb(200,200,200)"
+        
+        # tables
+        ,tableBackColor = "rgb(255, 255, 255)"
+        ,tableBorderColor = "rgb(245, 245, 245)"
+        ,tableBorderTopSize = 1
+        ,tableBorderRowSize = 1
+        
+      ),
+      
+      # Contents -----
+      
+      tags$head(tags$style(HTML(".content { padding-top: 2px;}"))),
+      
+      # Progress bar -----
+      
+      tags$head(tags$style(HTML('.progress-bar {background-color: rgb(22, 48, 91);}'))),
+      
+      # Pretty Radio Button -----
+      
+      tags$head(tags$style(HTML('.pretty input:checked~.state.p-primary label:after, .pretty.p-toggle .state.p-primary label:after {background-color: rgb(22, 48, 91)!important;}'))),
+      
+      # Slider -----
+      
+      setSliderColor(rep("rgb(22, 48, 91)", 100), seq(1, 100)),
+      chooseSliderSkin("Flat"),
+      
+      # Tab Panel -----
+      
+      tags$style(HTML(".tabbable > .nav > li > a {color: #93063e}")),
+      
+      tags$script(src = "fileInput_text.js"),
+      useShinyjs(),
+      tabItems(
+        
+        ## Home -----
+        
+        tabItem(tabName = "home",
+                div(id = "homepage", br(), HOME_COMMENT_MV, HOME_COMMENT, 
+                    p(" ", style = "margin-bottom: 10px;"),
+                    div(tags$img(src="Home2.png", height = 500, width = 540), style = "text-align: center;"), br(),
+                    HOME_COMMENT2, HOME_COMMENT3, HOME_COMMENT4)),
+        
+        ## 0. DATA INPUT -----
+        
+        tabItem(tabName = "step1", br(),
+                fluidRow(column(width = 6,
+                                box(width = NULL, status = "info", solidHeader = TRUE,
+                                    title = strong("Data Input", style = "color:white"),
+                                    selectInput("inputOption", h4(strong("Data type")), 
+                                                choices = c("Choose one" = "", "Phyloseq", "Individual Data"), width = '30%'),
+                                    div(id = "optionsInfo", 
+                                        tags$p("You can choose phyloseq or individual data.", style = "font-size:11pt"), 
+                                        tags$p("", style = "margin-bottom:-8px"), style = "margin-top: -15px"),
+                                    uiOutput("moreOptions")
+                                )
+                ), column(width = 6, style='padding-left:0px', uiOutput("addDownloadinfo"))
+                )
+        ),
+        
+        ## 1-1. QC ----
+        
+        tabItem(tabName = "step2", br(),
+                fluidRow(column(width = 3,  style = "padding-left:+15px",
+                                
+                                # Batch Effect Correction
+                                
+                                box(
+                                  width = NULL, status = "info", solidHeader = TRUE, 
+                                  title = strong("Batch Effect Correction", style = "color:white"),
+                                  h4(strong("Batch effect correction?", style = "color:black")),
+                                  p("Do you want to perform batch effect correction to balance the microbiome data across batches (e.g., labs, studies, locations, times) 
+                                    while preserving the signals from other importanct primary and nuisance variables? (optional)", style = "font-size:10pt"),
+                                  prettyRadioButtons("batch.yn", label = NULL,
+                                                     animation = "jelly",c("No", "Yes"), selected = "No", 
+                                                     icon = icon("check"), width = '80%'),
+                                  uiOutput("batch.method.select"),
+                                  uiOutput("batch"), 
+                                  uiOutput("prim"), 
+                                  uiOutput("covar")
+                                ),
+                                
+                                # Quality Control
+                                
+                                box(
+                                  width = NULL, status = "info", solidHeader = TRUE,
+                                  title = strong("Quality Control", style = "color:white"),
+                                  textInput("kingdom", h4(strong("Kingdom")), value = "Bacteria"),
+                                  QC_KINGDOM_COMMENT,
+                                  tags$style(type = 'text/css', '#slider1 .irs-grid-text {font-size: 1px}'),
+                                  tags$style(type = 'text/css', '#slider2 .irs-grid-text {font-size: 1px}'),
+                                  
+                                  sliderInput("slider1", h4(strong("Library size")), 
+                                              min=0, max=10000, value = 3000, step = 1000),
+                                  QC_LIBRARY_SIZE_COMMENT1,
+                                  QC_LIBRARY_SIZE_COMMENT2,
+                                  
+                                  sliderInput("slider2", h4(strong("Mean proportion")), 
+                                              min = 0, max = 0.1, value = 0.02, step = 0.001,  post  = " %"),
+                                  QC_MEAN_PROP_COMMENT1,
+                                  QC_MEAN_PROP_COMMENT2,
+                                  
+                                  br(),
+                                  p(" ", style = "margin-bottom: -20px;"),
+                                  
+                                  h4(strong("Errors in taxonomic names")),
+                                  textInput("rem.str", label = "Complete match", value = ""),
+                                  QC_TAXA_NAME_COMMENT1,
+                                  
+                                  textInput("part.rem.str", label = "Partial match", value = ""),
+                                  QC_TAXA_NAME_COMMENT2,
+                                  
+                                  actionButton("run", (strong("Run!")), class = "btn-info"), 
+                                  p(" ", style = "margin-bottom: +10px;"), 
+                                  p(strong("Attention:"),"You have to click this Run button to perform 
+                                    data transformation and further analyses.", style = "margin-bottom:-10px"), br()
+                                ),
+                                uiOutput("moreControls"),
+                                uiOutput("qc_reference")
+                ),
+                
+                column(width = 9, style = "padding-left:+10px",
+                       box(
+                         width = NULL, status = "info", solidHeader = TRUE,
+                         fluidRow(width = 12,
+                                  status = "info", solidHeader = TRUE, 
+                                  valueBoxOutput("sample_Size", width = 3),
+                                  valueBoxOutput("OTUs_Size", width = 3),
+                                  valueBoxOutput("phyla", width = 3),
+                                  valueBoxOutput("classes", width = 3)
+                         ),
+                         fluidRow(width = 12, 
+                                  status = "info", solidHeader = TRUE,
+                                  valueBoxOutput("orders", width = 3),
+                                  valueBoxOutput("families", width = 3),
+                                  valueBoxOutput("genera", width = 3),
+                                  valueBoxOutput("species", width = 3)
+                         ),
+                         fluidRow(style = "position:relative",
+                                  tabBox(width = 6, title = strong("Library Size", style = "color:black"), 
+                                         tabPanel("Histogram",
+                                                  plotlyOutput("hist"),
+                                                  sliderInput("binwidth", "# of Bins:",
+                                                              min = 0, max = 100, value = 50, width = "100%")),
+                                         tabPanel("Box Plot", 
+                                                  plotlyOutput("boxplot"))),
+                                  tabBox(width = 6, title = strong("Mean Proportion", style = "color:black"), 
+                                         tabPanel("Histogram",
+                                                  plotlyOutput("hist2"),
+                                                  sliderInput("binwidth2", "# of Bins:",
+                                                              min = 0, max = 100, value = 50, width = "100%")),
+                                         tabPanel("Box Plot",
+                                                  plotlyOutput("boxplot2")))
+                         )
+                       ),
+                       shinyjs::hidden(
+                         shiny::div(id = "pcoa.area",
+                                    box(width = NULL, status = "info", solidHeader = TRUE,
+                                        title = strong("Batch Effect Correction", style = "color:white"),
+                                        plotOutput("batch.pcoa", height = 600)))
+                       )
+                )
+                )
+        ),
+        
+        ## 1-2. Data Transformation -----
+        
+        tabItem(tabName = "divdtCalculation", br(),
+                fluidRow(column(width = 6, style = "padding-left:+15px",
+                                box(title = strong("Data Transformation", style = "color:white"), 
+                                    width = NULL, status = "info", solidHeader = TRUE, DATA_TRANSFORM_COMMENT, 
+                                    actionButton("dtRun", (strong("Run!")), class = "btn-info")),
+                                uiOutput("dtDownload")
+                ),
+                
+                column(width = 6, style='padding-left:0px',
+                       box(title = strong("References", style = "color:white"), 
+                           width = NULL, status = "info", solidHeader = TRUE, DATA_TRANSFORM_REFERENCE)
+                )
+                )
+        ),
+        
+        ##2. Descriptive ------
+        
+        tabItem(tabName = "descriptive", br(),
+                sidebarLayout(
+                  sidebarPanel(width = 3,
+                               uiOutput("de_response"),
+                               p(" ", style = "margin-bottom: +10px;"),
+                               uiOutput("de_response_rename"),
+                               p(" ", style = "margin-bottom: +10px;"),
+                               uiOutput("de_treat"),
+                               uiOutput("de_treat_rename"),
+                               uiOutput("de_chooseTest"),
+                               p(" ", style = "margin-bottom: -10px;"),
+                               uiOutput("de_legend"),
+                               p(" ", style = "margin-bottom: -10px;"),
+                               uiOutput("de_download"),
+                               p(" ", style = "margin-bottom: +30px;"),
+                               uiOutput("de_reference")),
+                  mainPanel(width = 9,
+                            fluidPage(width = NULL,
+                                      uiOutput("de_display"))
+                  ))),
+        
+        ## 3. Generalized Linear Models -----
+        
+        tabItem(tabName = "glm", br(),
+                sidebarLayout(
+                  sidebarPanel(width = 3,
+                               uiOutput("int_format"),
+                               uiOutput("int_response"),
+                               p(" ", style = "margin-bottom: +10px;"),
+                               uiOutput("int_response_rename"),
+                               p(" ", style = "margin-bottom: +20px;"),
+                               uiOutput("int_treat"),
+                               uiOutput("int_treat_rename"),
+                               uiOutput("int_cov"),
+                               uiOutput("int_chooseTest"),
+                               uiOutput("int_num_taxa"),
+                               uiOutput("int_legend"),
+                               p(" ", style = "margin-bottom: -10px;"),
+                               uiOutput("int_download"),
+                               p(" ", style = "margin-bottom: +30px;"),
+                               uiOutput("int_reference")),
+                  mainPanel(width = 9,
+                            fluidPage(width = NULL,
+                                      uiOutput("int_display"))
+                  ))),
+        
+        ## 4. Causal Forest -----
+        
+        tabItem(tabName = "causal_forest", br(),
+                sidebarLayout(
+                  sidebarPanel(width = 3,
+                               shinyjs::hidden(
+                                 uiOutput("cf_format"),
+                                 uiOutput("cf_response"),
+                                 uiOutput("cf_response_rename"),
+                                 uiOutput("cf_treat"),
+                                 uiOutput("cf_treat_rename"),
+                                 uiOutput('cf_method'),
+                                 uiOutput("cf_cov"),
+                                 uiOutput("cf_tax_rank"),
+                                 uiOutput("cf_num_taxa"),
+                                 uiOutput("cf_download"),
+                                 uiOutput("cf_reference")
+                               )),
+                  mainPanel(width = 9,
+                            fluidPage(width = NULL,
+                                      uiOutput("cf_display"))
+                  )))
+      )
+    )
+  )
+}
+
 # SERVER -----------------------------------------------------------------------
 
 server = function(input, output, session){
   options(shiny.maxRequestSize = 30*1024^2)
-  source("setSliderColor.R")
-  source("MiDataProc.Data.Upload.R")
-  source("MiDataProc.Data.Input.R")
-  source("MiDataProc.Descriptive.R")
-  source("MiDataProc.GLM.R")
-  source("MiDataProc.Beta.Diversity.R")
-  source("MiDataProc.ML.Models.R")
-  source("MiDataProc.Causal.R")
   
   env <- new.env()
   nm <- load(file = "Data/Immuno.Metagenome.Char.Rdata", env)[1]
@@ -1049,7 +1509,7 @@ server = function(input, output, session){
                          icon = icon("check"), animation = "jelly",
                          choices = c("Double-sample tree", "Propensity tree"), selected = "Propensity tree", width = '70%'),
       
-      
+
       
       
       # tags$style(type = 'text/css', "#cf_method .pretty .state label::after {margin-top: 20px}"),
@@ -1191,18 +1651,19 @@ server = function(input, output, session){
           batchid <<- as.factor(sam.dat[[input$batch.var]])
           
           prim.var <- input$prim.var
-          if (!is.null(input$covar)) {
+          if(!is.null(input$covar)){
             cov <- input$covar
             df <- data.frame(sam.dat[,prim.var], sam.dat[,cov])
           } else {
             df <- data.frame(sam.dat[,prim.var])
           }
           
-          for (name in colnames(df)) {
+          for(name in colnames(df)){
             type <- col.str.check(sam.dat, name)
-            if (type == "factor") {
+            if(type == "factor"){
               df[[name]] <- as.factor(df[[name]])
-            } else if (type == "numeric"){
+            }
+            else if(type == "numeric"){
               df[[name]] <- as.numeric(df[[name]])
             } else {
               df[[name]] <- df[[name]]
@@ -1212,14 +1673,15 @@ server = function(input, output, session){
           f1 <- as.formula(paste("~" ,paste(names(df), collapse = "+"), collapse = ""))
           covar <- model.matrix(f1, data = df)[,-1]
           
-          if (input$batch.method == "ConQuR") {
+          if(input$batch.method == "ConQuR"){
             ref.bat <- names(which.max(table(batchid)))
             set.seed(578)
             adjusted.otu.tab <- ConQuR(tax_tab = otu.tab, batchid = batchid,
                                        covariates = covar, batch_ref = ref.bat,
                                        logistic_lasso = T, quantile_type = "lasso", interplt = T, num_core = 1)
             bat.otu.tab <- otu_table(t(as.data.frame(as.matrix(adjusted.otu.tab))), taxa_are_rows = TRUE)
-          } else {
+          }
+          else{
             set.seed(578)
             adjusted.otu.tab <- sva::ComBat_seq(otu.tab, batch=batchid, group=NULL, covar_mod = covar)
             bat.otu.tab <- otu_table(as.data.frame(as.matrix(adjusted.otu.tab)), taxa_are_rows = TRUE)
@@ -2722,7 +3184,7 @@ server = function(input, output, session){
             var.names.list[[name]] <- data.frame(sub = colnames(step2.result$Taxa), ori = step2.result$taxa.names)
             
             # Step 3. BoRT
-            
+
             set.seed(578)
             step3.result <- try(bort.func(step2.result, name, n.tree = 100), silent = TRUE)
             
@@ -2733,7 +3195,7 @@ server = function(input, output, session){
             step4.result <- try(bort.treatment.pred(step2.result, name, n.tree = 100), silent = TRUE)
             
             dt.fit.list[[name]] <- step2.result$best.dt.fit
-            
+
             rf.fit.list[[name]] <- step4.result
             
             # DT used variable
@@ -2913,3 +3375,6 @@ server = function(input, output, session){
     shinyjs::enable("cf_reference")
   })
 }
+
+# RUN ------
+shinyApp(ui = ui, server = server)

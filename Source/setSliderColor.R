@@ -31,4 +31,3 @@ setSliderColor <- function(color, sliderId) {
   custom_head <- tags$head(tags$style(HTML(as.character(sliderCol))))
   return(custom_head)
 }
-
