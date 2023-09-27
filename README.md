@@ -20,7 +20,7 @@ License: GPL 1, GPL 2
 
 **Maintainer**: Hyunwook Koh <hyunwook.koh@stonybrook.edu>
 
-**Reference**: Koh H, Kim J, Jang H. A microbiome-based causal machine learning cloud platform for the analysis of treatment effects using microbial profiles (*In review*). 
+**Reference**: Koh H, Kim J, Jang H. MiCML: A microbiome-based causal machine learning cloud platform for the analysis of treatment effects using microbial profiles (*In review*). 
 
 ## Prerequites
 

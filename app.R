@@ -83,14 +83,16 @@ options(scipen=999)
 
 {
   TITLE = p("MiCML: Microbiome-Based Causal Machine Learning for the Analysis of Treatment Effects Using Microbial Profiles", style = "font-size:16pt")
-  HOME_COMMENT_MV = p(strong("Importance:"), "The treatment effects are heterogenous by patients due to the differences 
+  HOME_COMMENT_MV = p(strong("Motivation:"), "The treatment effects are heterogenous by patients due to the differences 
                       in their microbiomes, which in turn implies that we can enhance the treatment effect by manipulating 
                       the patient’s microbiome profile. Then, the coadministration of microbiome-based dietary 
                       supplements (e.g., prebiotics, probiotics, dietary fiber) or therapeutics (e.g., antibiotics, pharmabiotics, 
                       phage therapy, microbiota transplantation) along with the primary treatment (e.g., immunotherapy) 
                       has been the subject of intensive investigation. For this, we first need to comprehend which 
                       microbes help (or prevent) the treatment to cure the patient’s disease, which is in principle the matter 
-                      of interaction effects between treatment and microbiome on the patient’s recovery.", strong("MiCML (microbiome causal machine learning)"), "is the first 
+                      of interaction effects between treatment and microbiome on the patient’s recovery.", style = "font-size:13pt")
+  
+  HOME_COMMENT = p(strong("Description:"), strong("MiCML (microbiome causal machine learning)"), "is the first 
                       cloud computing platform that streamlines related data processing and analytic procedures for the 
                       interaction effects on user-friendly web environments. MiCML is in particular unique with the up-to-date features 
                       of (i)", strong("batch effect correction"),  "to mitigate systematic variation in collective large-scale microbiome data 
@@ -99,9 +101,7 @@ options(scipen=999)
                       taxa that enhance (or lower) the efficacy of the primary treatment. We also stress that MiCML 
                       can handle the data from either randomized controlled trials or observational studies. 
                       MiCML can be a useful analytic tool for microbiome-based personalized medicine to enhance patient 
-                      well-beings while lowering medical expenses.", style = "font-size:13pt")
-  
-  HOME_COMMENT = p(strong("Description:"), "MiCML is a web cloud computing platform for the comprehensive analysis of treatment effects using microbiome profiles. MiCML consists of three", strong("Data Processing"), "modules, (i) Data Input, (ii) Batch Effect Correction & Quality Control, and (iii) Data Transformation and three", strong("Data Analysis"), "modules, 
+                      well-beings while lowering medical expenses. MiCML consists of three", strong("Data Processing"), "modules, (i) Data Input, (ii) Batch Effect Correction & Quality Control, and (iii) Data Transformation and three", strong("Data Analysis"), "modules, 
                    (i) Descriptive Analysis, (ii) Generalized Linear Models, and (iii) Causal Machine Learning.", style = "font-size:13pt")
   
   HOME_COMMENT2 = p(strong("URLs:"), "Web server (online implementation):", tags$a(href = "http://micml.micloud.kr", "http://micml.micloud.kr"), 
@@ -111,7 +111,7 @@ options(scipen=999)
   HOME_COMMENT3 = p(strong("Maintainers:"), "Hyunwook Koh (", tags$a(href = "hyunwook.koh@stonybrook.edu", "hyunwook.koh@stonybrook.edu"), ")", style = "font-size:13pt")
   
   HOME_COMMENT4 = p(strong("Reference:"), "Koh H, Kim J, Jang H. 
-                    A microbiome-based causal machine learning cloud platform for the analysis of treatment effects using microbial profiles (Under review)", style = "font-size:13pt")
+                    MiCML: A microbiome-based causal machine learning cloud platform for the analysis of treatment effects using microbial profiles (Under review)", style = "font-size:13pt")
   
   INPUT_PHYLOSEQ_COMMENT1 = p(strong("Description:"), br(), br(), "This should be an '.rdata' or '.rds' file, and the data should be in 'phyloseq' format (see ", 
                               htmltools::a(tags$u("https://bioconductor.org/packages/release/bioc/html/phyloseq.html"), style = "color:red3"),
@@ -305,14 +305,14 @@ options(scipen=999)
         ,bodyBackColor = "rgb(255,255,255)"
         
         # header
-        ,logoBackColor = "rgb(230, 70, 50)"
+        ,logoBackColor = "rgb(250, 60, 70)"
         
-        ,headerButtonBackColor = "rgb(230, 70, 50)"
-        ,headerButtonIconColor = "rgb(230, 70, 50)"
-        ,headerButtonBackColorHover = "rgb(230, 70, 50)"
+        ,headerButtonBackColor = "rgb(250, 60, 70)"
+        ,headerButtonIconColor = "rgb(250, 60, 70)"
+        ,headerButtonBackColorHover = "rgb(250, 60, 70)"
         ,headerButtonIconColorHover = "rgb(0,0,0)"
         
-        ,headerBackColor = "rgb(230, 70, 50)"
+        ,headerBackColor = "rgb(250, 60, 70)"
         ,headerBoxShadowColor = "#aaaaaa"
         ,headerBoxShadowSize = "0px 0px 0px"
         
@@ -358,7 +358,7 @@ options(scipen=999)
         ,boxTitleSize = 16
         ,boxDefaultColor = "rgb(210,214,220)"
         ,boxPrimaryColor = "rgb(35, 49, 64)"
-        ,boxInfoColor = "rgb(230, 70, 50)"
+        ,boxInfoColor = "rgb(250, 60, 70)"
         ,boxSuccessColor = "rgb(112,173,71)"
         ,boxWarningColor = "rgb(244,156,104)"
         ,boxDangerColor = "rgb(255,88,55)"
@@ -368,7 +368,7 @@ options(scipen=999)
         ,tabBoxTabTextColor = "rgb(0,0,0)"
         ,tabBoxTabTextColorSelected = "rgb(35, 49, 64)"
         ,tabBoxBackColor = "rgb(255,255,255)"
-        ,tabBoxHighlightColor = "rgb(230, 70, 50)"
+        ,tabBoxHighlightColor = "rgb(250, 60, 70)"
         ,tabBoxBorderRadius = 0
         
         # inputs
