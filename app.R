@@ -419,8 +419,8 @@ options(scipen=999)
         
         tabItem(tabName = "home",
                 div(id = "homepage", br(), HOME_COMMENT_MV, HOME_COMMENT, 
-                    p(" ", style = "margin-bottom: 10px;"),
-                    div(tags$img(src="Home2.png", height = 200, width = 600), style = "text-align: center;"), br(),
+                    p(" ", style = "margin-bottom: 10px;"), br(),
+                    div(tags$img(src="Home2.png", height = 180, width = 560), style = "text-align: center;"), br(),
                     HOME_COMMENT2, HOME_COMMENT3, HOME_COMMENT4)),
         
         ## 0. DATA INPUT -----
