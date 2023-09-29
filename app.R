@@ -89,7 +89,7 @@ options(scipen=999)
                       therapeutics (e.g., antibiotics, pharmabiotics, phage therapy, microbiota transplantation) along with the primary treatment 
                       (e.g., immunotherapy) has been the subject of intensive investigation. For this, we first need to comprehend which microbes help 
                       (or prevent) the treatment to cure the patient’s disease, which is in principle the matter of interaction effects 
-                      between treatment and microbiome on the patient’s recovery.", style = "font-size:13pt")
+                      between treatment and microbiome on the patient’s recovery.", style = "font-size:12.5pt")
   
   HOME_COMMENT = p(strong("MiCML (Microbiome Causal Machine Learning)"), "is a cloud platform for the analysis of treatment effects using microbiome profiles 
                    on user-friendly web environments. MiCML is in particular unique with the up-to-date features of (1)", strong("Batch Effect Correction"),  
@@ -97,16 +97,16 @@ options(scipen=999)
                    and (2)", strong("Causal Machine Learning"), "to estimate treatment effects with consistency and then discern microbial taxa 
                    that enhance (or lower) the efficacy of the primary treatment. We also stress that MiCML can handle the data from either randomized controlled 
                    trials or observational studies. MiCML can be a useful analytic tool for microbiome-based personalized medicine to enhance patient well-being while 
-                   lowering medical expenses.", style = "font-size:13pt")
+                   lowering medical expenses.", style = "font-size:12.5pt")
   
   HOME_COMMENT2 = p(strong("URLs:"), "Web server (online implementation):", tags$a(href = "http://micml.micloud.kr", "http://micml.micloud.kr"), 
                     "; GitHub repository (local implementation):", 
-                    tags$a(href = "https://github.com/hk1785/micml", "https://github.com/hk1785/micml"), style = "font-size:13pt")
+                    tags$a(href = "https://github.com/hk1785/micml", "https://github.com/hk1785/micml"), style = "font-size:12.5pt")
   
-  HOME_COMMENT3 = p(strong("Maintainers:"), "Hyunwook Koh (", tags$a(href = "hyunwook.koh@stonybrook.edu", "hyunwook.koh@stonybrook.edu"), ")", style = "font-size:13pt")
+  HOME_COMMENT3 = p(strong("Maintainers:"), "Hyunwook Koh (", tags$a(href = "hyunwook.koh@stonybrook.edu", "hyunwook.koh@stonybrook.edu"), ")", style = "font-size:12.5pt")
   
   HOME_COMMENT4 = p(strong("Reference:"), "Koh H, Kim J, Jang H. 
-                    MiCML: A microbiome-based causal machine learning cloud platform for the analysis of treatment effects using microbial profiles (Under review)", style = "font-size:13pt")
+                    MiCML: A microbiome-based causal machine learning cloud platform for the analysis of treatment effects using microbial profiles (Under review)", style = "font-size:12.5pt")
   
   INPUT_PHYLOSEQ_COMMENT1 = p(strong("Description:"), br(), br(), "This should be an '.rdata' or '.rds' file, and the data should be in 'phyloseq' format (see ", 
                               htmltools::a(tags$u("https://bioconductor.org/packages/release/bioc/html/phyloseq.html"), style = "color:red3"),
