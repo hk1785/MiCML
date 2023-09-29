@@ -83,26 +83,21 @@ options(scipen=999)
 
 {
   TITLE = p("MiCML: Microbiome-Based Causal Machine Learning for the Analysis of Treatment Effects Using Microbial Profiles", style = "font-size:16pt")
-  HOME_COMMENT_MV = p(strong("Motivation:"), "The treatment effects are heterogenous by patients due to the differences 
-                      in their microbiomes, which in turn implies that we can enhance the treatment effect by manipulating 
-                      the patient’s microbiome profile. Then, the coadministration of microbiome-based dietary 
-                      supplements (e.g., prebiotics, probiotics, dietary fiber) or therapeutics (e.g., antibiotics, pharmabiotics, 
-                      phage therapy, microbiota transplantation) along with the primary treatment (e.g., immunotherapy) 
-                      has been the subject of intensive investigation. For this, we first need to comprehend which 
-                      microbes help (or prevent) the treatment to cure the patient’s disease, which is in principle the matter 
-                      of interaction effects between treatment and microbiome on the patient’s recovery.", style = "font-size:13pt")
+  HOME_COMMENT_MV = p(strong("Orientation:"), "The treatment effects are heterogenous by patients due to the differences in their microbiomes, 
+                      which in turn implies that we can enhance the treatment effect by manipulating the patient’s microbiome profile. 
+                      Then, the coadministration of microbiome-based dietary supplements (e.g., prebiotics, probiotics, dietary fiber) or 
+                      therapeutics (e.g., antibiotics, pharmabiotics, phage therapy, microbiota transplantation) along with the primary treatment 
+                      (e.g., immunotherapy) has been the subject of intensive investigation. For this, we first need to comprehend which microbes help 
+                      (or prevent) the treatment to cure the patient’s disease, which is in principle the matter of interaction effects 
+                      between treatment and microbiome on the patient’s recovery.", style = "font-size:13pt")
   
-  HOME_COMMENT = p(strong("Description:"), strong("MiCML (microbiome causal machine learning)"), "is the first 
-                      cloud computing platform that streamlines related data processing and analytic procedures for the 
-                      interaction effects on user-friendly web environments. MiCML is in particular unique with the up-to-date features 
-                      of (i)", strong("batch effect correction"),  "to mitigate systematic variation in collective large-scale microbiome data 
-                      due to the differences in their underlying batches (e.g., lab or study environments), 
-                      and (ii)", strong("causal machine learning"), "to estimate treatment effects with consistency and then discern microbial 
-                      taxa that enhance (or lower) the efficacy of the primary treatment. We also stress that MiCML 
-                      can handle the data from either randomized controlled trials or observational studies. 
-                      MiCML can be a useful analytic tool for microbiome-based personalized medicine to enhance patient 
-                      well-beings while lowering medical expenses. MiCML consists of three", strong("Data Processing"), "modules, (i) Data Input, (ii) Batch Effect Correction & Quality Control, and (iii) Data Transformation and three", strong("Data Analysis"), "modules, 
-                   (i) Descriptive Analysis, (ii) Generalized Linear Models, and (iii) Causal Machine Learning.", style = "font-size:13pt")
+  HOME_COMMENT = p(strong("MiCML (Microbiome Causal Machine Learning)"), "is a cloud platform for the analysis of treatment effects using microbiome profiles 
+                   on user-friendly web environments. MiCML is in particular unique with the up-to-date features of (1)", strong("Batch Effect Correction"),  
+                   "to mitigate systematic variation in collective large-scale microbiome data due to the differences in their underlying batches (e.g., lab or study environments), 
+                   and (2)", strong("Causal Machine Learning"), "to estimate treatment effects with consistency and then discern microbial taxa 
+                   that enhance (or lower) the efficacy of the primary treatment. We also stress that MiCML can handle the data from either randomized controlled 
+                   trials or observational studies. MiCML can be a useful analytic tool for microbiome-based personalized medicine to enhance patient well-being while 
+                   lowering medical expenses.", style = "font-size:13pt")
   
   HOME_COMMENT2 = p(strong("URLs:"), "Web server (online implementation):", tags$a(href = "http://micml.micloud.kr", "http://micml.micloud.kr"), 
                     "; GitHub repository (local implementation):", 
@@ -425,7 +420,7 @@ options(scipen=999)
         tabItem(tabName = "home",
                 div(id = "homepage", br(), HOME_COMMENT_MV, HOME_COMMENT, 
                     p(" ", style = "margin-bottom: 10px;"),
-                    div(tags$img(src="Home2.png", height = 500, width = 540), style = "text-align: center;"), br(),
+                    div(tags$img(src="Home2.png", height = 200, width = 600), style = "text-align: center;"), br(),
                     HOME_COMMENT2, HOME_COMMENT3, HOME_COMMENT4)),
         
         ## 0. DATA INPUT -----
