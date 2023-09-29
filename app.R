@@ -419,7 +419,7 @@ options(scipen=999)
         
         tabItem(tabName = "home",
                 div(id = "homepage", br(), HOME_COMMENT_MV, HOME_COMMENT, br(),
-                    div(tags$img(src="Home2.png", height = 175, width = 540), style = "text-align: center;"), "https://xkcd.com/552/", br(),
+                    div(tags$img(src="Home2.png", height = 175, width = 540), style = "text-align: center;"), br(),
                     HOME_COMMENT2, HOME_COMMENT3, HOME_COMMENT4)),
         
         ## 0. DATA INPUT -----
