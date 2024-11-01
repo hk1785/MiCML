@@ -42,7 +42,7 @@ MiCML requires four data components: feature table, taxonomic table, metadata/sa
 
 * **Phylogenetic tree:** It should be a rooted tree. Otherwise, MiCML automatically roots the tree through midpoint rooting (phangorn::midpoint). The tip labels of the phylogenetic tree are feature IDs. 
 
-* **Note:** The features should be matched and identical across feature table, taxonomic table and phylogenetic tree. The subjects should be matched and identical between feature table and metadata/sample information. MiCML will analyze only the matched features and subjects.
+**Notice:** The features should be matched and identical across feature table, taxonomic table and phylogenetic tree. The subjects should be matched and identical between feature table and metadata/sample information. MiCML will analyze only the matched features and subjects.
 
 ## Example Data
 
