@@ -48,6 +48,8 @@ MiCML requires four data components: feature table, taxonomic table, metadata/sa
 
 **Notice:** The features should be matched and identical across feature table, taxonomic table and phylogenetic tree. The subjects should be matched and identical between feature table and metadata/sample information. MiCML will analyze only the matched features and subjects.
 
+<hr>
+
 ## Example Data
 
 **(1) Phyloseq:** You can download example microbiome data (Limeta et al., 2020) in a unified format, called phyloseq, 'biom.Rdata' in the directory 'Data/Phyloseq'. For more details about 'phyloseq', see https://bioconductor.org/packages/release/bioc/html/phyloseq.html
