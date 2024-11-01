@@ -20,6 +20,8 @@
 
 **Reference:** Koh H, Kim J, Jang H. MiCML: A causal machine learning cloud platform for the analysis of treatment effects using microbiome profiles (*In review*). 
 
+<hr>
+
 ## GitHub Repository Contents
 
 * **Data** - In this directory, example microbiome data are stored in a unified format, called phyloseq (see 'biom.Rdata' in 'Data/Phyloseq') as well as individual files (see feature table (otu.tab.txt), taxonomic table (tax.tab.txt), metadata/sample information (sam.dat.txt), and phylogenetic tree (tree.tre) in 'Data/Individual').
@@ -29,6 +31,8 @@
 * **www** - In this directory, some photos that are used to decorate the GUI of MiCML are stored.
 
 * **app.R** - In this file, all the central codes to control for user-interfaces and server functions of MiCML are stored.
+
+<hr>
 
 ## Required Data Components
 
@@ -83,6 +87,8 @@ identical(rownames(otu.tab), tree$tip.label)
 identical(colnames(otu.tab), rownames(sam.dat))
 ```
 * Reference: Limeta A, Ji B, Levin M, Gatto F, Nielsen J. Meta-analysis of the gut microbiota in predicting response to cancer immunotherapy in metastatic melanoma. JCL Insight. 2020;5(23):e140940.
+
+<hr>
 
 ## Prerequites
 
