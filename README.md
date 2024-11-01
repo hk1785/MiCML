@@ -30,8 +30,20 @@
 
 * **app.R** - In this file, all the central codes to control for user-interfaces and server functions of MiCML are stored.
 
-## Data Preparation
+## Required Data 
 
+* **Description:** MiCML requires four data components: feature table, taxonomic table, metadata/sample information, and phylogenetic tree. Details are as follows.
+
+* **Feature table:** It should contain counts, where rows are features (OTUs or ASVs) and columns are subjects (row names are feature IDs and column names are subject IDs). 
+
+* **Taxonomic table:** It should contain taxonomic names, where rows are features and columns are seven taxonomic ranks (row names are feature IDs and column names are 'Kingdom', 'Phylum', 'Class', 'Order', 'Family', 'Genus', 'Species' or 'Domain', 'Phylum', 'Class', 'Order', 'Family', 'Genus', 'Species'). 
+
+* **Metadata/Sample information:** It should contain variables for the subjects about host phenotypes, medical interventions, disease status or environmental/behavioral factors, where rows are subjects and columns are variables (row names are subject IDs, and column names are variable names). 
+
+* **Phylogenetic tree:** It should be a rooted tree. Otherwise, MiCML automatically roots the tree through midpoint rooting (phangorn::midpoint). The tip labels of the phylogenetic tree are feature IDs. 
+
+* The features should be matched and identical across feature table, taxonomic table and phylogenetic tree. The subjects should be matched and identical between feature table and metadata/sample information. MiCML will analyze only the matched features and subjects.
+  
 **(1) Phyloseq:** You can download example microbiome data (Limeta et al., 2020) in a unified format, called phyloseq, 'biom.Rdata' in the directory 'Data/Phyloseq'. For more details about 'phyloseq', see https://bioconductor.org/packages/release/bioc/html/phyloseq.html
 ```
 library(phyloseq)
