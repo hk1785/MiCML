@@ -32,7 +32,7 @@
 
 ## Data Preparation
 
-**Phyloseq:** You can download example microbiome data in a unified format, called phyloseq, 'biom.Rdata' in the directory 'Data/Phyloseq'. For more details about 'phyloseq', see https://bioconductor.org/packages/release/bioc/html/phyloseq.html
+**(1) Phyloseq:** You can download example microbiome data (Limeta et al., 2020) in a unified format, called phyloseq, 'biom.Rdata' in the directory 'Data/Phyloseq'. For more details about 'phyloseq', see https://bioconductor.org/packages/release/bioc/html/phyloseq.html
 ```
 library(phyloseq)
 
@@ -51,7 +51,7 @@ identical(rownames(otu.tab), rownames(tax.tab))
 identical(rownames(otu.tab), tree$tip.label)
 identical(colnames(otu.tab), rownames(sam.dat))
 ```
-**Individual Data:** You can download example microbiome data as individual files: feature table (otu.tab.txt), taxonomic table (tax.tab.txt), metadata/sample information (sam.dat.txt), and phylogenetic tree (tree.tre) in the directory 'Data/Individual'
+**(2) Individual Data:** You can download example microbiome data (Limeta et al., 2020) as individual files: feature table (otu.tab.txt), taxonomic table (tax.tab.txt), metadata/sample information (sam.dat.txt), and phylogenetic tree (tree.tre) in the directory 'Data/Individual'
 ```
 library(ape)
 
@@ -68,7 +68,7 @@ identical(rownames(otu.tab), rownames(tax.tab))
 identical(rownames(otu.tab), tree$tip.label)
 identical(colnames(otu.tab), rownames(sam.dat))
 ```
-Reference: Limeta A, Ji B, Levin M, Gatto F, Nielsen J. Meta-analysis of the gut microbiota in predicting response to cancer immunotherapy in metastatic melanoma. JCL Insight. 2020;5(23):e140940.
+**Reference:** Limeta A, Ji B, Levin M, Gatto F, Nielsen J. Meta-analysis of the gut microbiota in predicting response to cancer immunotherapy in metastatic melanoma. JCL Insight. 2020;5(23):e140940.
 
 ## Prerequites
 
