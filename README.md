@@ -10,7 +10,7 @@
 
 **Depends:** R(≥ 4.1.0)
 
-**Imports:** Bioconductor ('BiocParallel', 'biomformat', 'phyloseq'); CRAN ('grf', 'betareg', 'BiasedUrn', 'BiocManager', 'bios2mds', 'CompQuadForm', 'dashboardthemes', 'devtools', 'DiagrammeR', 'dirmult', 'dplyr', 'DT', 'ecodist', 'edarf', 'entropart', 'erer', 'fBasics', 'forestplot', 'fossil', 'ggplot2', 'ggthemes', 'googleVis', 'gridExtra', 'gridGraphics', 'compositions', 'GUniFrac', 'htmltools', 'ICSNP', 'lme4', 'lmerTest', 'MiRKAT', 'mmpf', 'nlme', 'patchwork', 'phangorn', 'picante', 'plotly', 'PMCMRplus', 'quantreg', 'remotes', 'reticulate', 'rgl', 'rmarkdown', 'robCompositions', 'robustbase', 'seqinr', 'shiny', 'shinydashboard', 'shinyjs', 'shinyWidgets', 'stringr', 'tidyverse', 'vegan', 'xtable', 'zCompositions', 'zip', 'bda', 'mediation'); GitHub ('ConQuR')
+**Imports:** Bioconductor ('BiocParallel', 'biomformat', 'phyloseq'); CRAN ('ape', 'grf', 'betareg', 'BiasedUrn', 'BiocManager', 'bios2mds', 'CompQuadForm', 'dashboardthemes', 'devtools', 'DiagrammeR', 'dirmult', 'dplyr', 'DT', 'ecodist', 'edarf', 'entropart', 'erer', 'fBasics', 'forestplot', 'fossil', 'ggplot2', 'ggthemes', 'googleVis', 'gridExtra', 'gridGraphics', 'compositions', 'GUniFrac', 'htmltools', 'ICSNP', 'lme4', 'lmerTest', 'MiRKAT', 'mmpf', 'nlme', 'patchwork', 'phangorn', 'picante', 'plotly', 'PMCMRplus', 'quantreg', 'remotes', 'reticulate', 'rgl', 'rmarkdown', 'robCompositions', 'robustbase', 'seqinr', 'shiny', 'shinydashboard', 'shinyjs', 'shinyWidgets', 'stringr', 'tidyverse', 'vegan', 'xtable', 'zCompositions', 'zip', 'bda', 'mediation'); GitHub ('ConQuR')
 
 **License:** General Public License 3 (GPL3) 
 
@@ -22,7 +22,7 @@
 
 ## GitHub Repository Contents
 
-* **Data** - In this directory, example microbiome data are stored in a widely used unified format, called phyloseq (see 'biom.Rdata' in 'Data/Phyloseq') as well as individual files (see feature table (otu.tab.txt), taxonomic table (tax.tab.txt), metadata/sample information (sam.dat.txt), and phylogenetic tree (tree.tre) in 'Data/Phyloseq').
+* **Data** - In this directory, example microbiome data are stored in a unified format, called phyloseq (see 'biom.Rdata' in 'Data/Phyloseq') as well as individual files (see feature table (otu.tab.txt), taxonomic table (tax.tab.txt), metadata/sample information (sam.dat.txt), and phylogenetic tree (tree.tre) in 'Data/Individual').
   
 * **Source** - In this directory, all the R functions that are needed to run MiCML are stored.
 
@@ -32,7 +32,7 @@
 
 ## Data Preparation
 
-**phyloseq:** You can download example microbiome data file 'biom.Rdata' in the directory 'Data/Phyloseq'. For more details about 'phyloseq', see https://bioconductor.org/packages/release/bioc/html/phyloseq.html
+**Phyloseq:** You can download example microbiome data in a unified format, called phyloseq, 'biom.Rdata' in the directory 'Data/Phyloseq'. For more details about 'phyloseq', see https://bioconductor.org/packages/release/bioc/html/phyloseq.html
 ```
 library(phyloseq)
 
@@ -44,6 +44,23 @@ otu.tab <- otu_table(biom)
 tax.tab <- tax_table(biom)
 sam.dat <- sample_data(biom)
 tree <- phy_tree(biom)
+```
+You can check if the features are matched and identical across feature table, taxonomic table and phylogenetic tree, and the subjects are matched and identical between feature table and metadata/sample information using following code.
+```
+identical(rownames(otu.tab), rownames(tax.tab))
+identical(rownames(otu.tab), tree$tip.label)
+identical(colnames(otu.tab), rownames(sam.dat))
+```
+**Individual Data:** You can download example microbiome data as individual files: feature table (otu.tab.txt), taxonomic table (tax.tab.txt), metadata/sample information (sam.dat.txt), and phylogenetic tree (tree.tre) in the directory 'Data/Individual'
+```
+library(ape)
+
+setwd('/yourdatadirectory/')
+
+otu.tab <- read.table(file = 'otu.tab.txt', check.names = FALSE)
+tax.tab <- read.table(file = 'tax.tab.txt', check.names = FALSE)
+sam.dat <- read.table(file = 'sam.dat.txt', check.names = FALSE)
+tree <- read.tree(file = 'tree.tre')
 ```
 You can check if the features are matched and identical across feature table, taxonomic table and phylogenetic tree, and the subjects are matched and identical between feature table and metadata/sample information using following code.
 ```
