@@ -99,6 +99,8 @@ shiny
 install.packages('shiny')
 ```
 
+<hr>
+
 ## Launch App
 
 ```
@@ -106,6 +108,8 @@ library(shiny)
 
 runGitHub('MiCML', 'hk1785', ref = 'main')
 ```
+
+<hr>
 
 ## Troubleshooting Tips
 
