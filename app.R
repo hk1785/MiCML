@@ -1497,7 +1497,7 @@ server = function(input, output, session){
       prettyRadioButtons(inputId = "cf_method",
                          label = NULL,
                          icon = icon("check"), animation = "jelly",
-                         choices = c("Double-sample tree", "Propensity tree"), selected = "Propensity tree", width = '70%'))
+                         choices = c("Double-sample tree", "Propensity tree"), selected = "Propensity tree", width = '70%'),)
   })
   
   observeEvent(input$cf_method, {
