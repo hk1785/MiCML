@@ -1,3 +1,7 @@
+options(scipen=999)
+options(warn=-1)
+options(echo=FALSE, message=FALSE, results='hide')
+
 ls.pkg <- c('ape', 'BiocManager', 'bios2mds', 'caret', 'compositions', 'data.table', 'doParallel', 'DT', 'ecodist', 'edarf', 'fossil', 'fontawesome', 
             'GUniFrac', 'googleVis', 'ggplot2', 'ggplotify', 'grid', 'grf', 'htmltools', 
             'MiRKAT', 'mmpf', 'phangorn', 'picante', 'plotly', 'proxy', 
@@ -74,10 +78,6 @@ source("Source/MiDataProc.DataInput.R")
 source("Source/MiDataProc.Descriptive.R")
 source("Source/MiDataProc.GLM.R")
 source("Source/MiDataProc.CML.R")
-
-options(scipen=999)
-options(warn=-1)
-options(echo=FALSE, message=FALSE, results='hide')
 
 # COMMENTS ------
 
