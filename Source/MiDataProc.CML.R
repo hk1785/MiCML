@@ -1,4 +1,5 @@
 double.sample.treatment.pred <- function(Feature, Response, Treatment, n.tree = 10000) {
+  s.time <- proc.time()
   cf.fit <- causal_forest(X = Feature, Y = Response, W = Treatment, num.trees = n.tree, 
                           sample.weights = NULL, clusters = NULL, equalize.cluster.weights = FALSE,
                           sample.fraction = 0.5, min.node.size = 5, 
@@ -8,18 +9,19 @@ double.sample.treatment.pred <- function(Feature, Response, Treatment, n.tree = 
                           tune.num.trees = n.tree/10, tune.num.reps = n.tree/10, tune.num.draws = n.tree/10, 
                           compute.oob.predictions = TRUE, num.threads = NULL, 
                           seed = 521)
+  e.time <- proc.time()
+  e.time - s.time
   pred <- predict(cf.fit, estimate.variance = TRUE)
   Treat.Effect <- pred$predictions 
-  
   return(list(fit = cf.fit, Treat.Effect = pred$predictions))
 }
 
 propensity.treatment.pred <- function(Feature, Response, Treatment, Covariate, n.tree = 10000) {
-  
   reg.W.fit <- regression_forest(X = Feature, Y = Treatment, num.trees = n.tree, seed = 521)
   W.hat <- predict(reg.W.fit)$predictions
   reg.Y.fit <- regression_forest(X = Feature, Y = Response, num.trees = n.tree, seed = 521)
   Y.hat <- predict(reg.Y.fit)$predictions
+  s.time <- proc.time()
   cf.fit <- causal_forest(X = Feature, Y = Response, W = Treatment, num.trees = n.tree, 
                           Y.hat = Y.hat, W.hat = W.hat, 
                           sample.weights = NULL, clusters = NULL, equalize.cluster.weights = FALSE,
@@ -30,31 +32,25 @@ propensity.treatment.pred <- function(Feature, Response, Treatment, Covariate, n
                           tune.num.trees = n.tree/10, tune.num.reps = n.tree/10, tune.num.draws = n.tree/10, 
                           compute.oob.predictions = TRUE, num.threads = NULL, 
                           seed = 521)
-  
+  e.time <- proc.time()
+  e.time - s.time
   pred <- predict(cf.fit, estimate.variance = TRUE)
   Treat.Effect <- pred$predictions 
-  
   return(list(fit = cf.fit, Treat.Effect = pred$predictions))
 }
 
 
-subgroup.id <- function(Treat.Effect, taxa.out, type, level.name){
-  
+subgroup.id <- function(Treat.Effect, taxa.out, type, level.name) {
   Taxa <- taxa.out[[type]][[level.name]]
-  
   taxa.names <- character()
   for (i in 1:ncol(Taxa)) {
     taxon.name <- colnames(Taxa)[i]
     taxon.name <- unlist(strsplit(taxon.name, ";"))
     taxa.names[i] <- taxon.name[length(taxon.name)]
   }
-  
   colnames(Taxa) <- paste(substr(level.name, 1, 1), 1:ncol(Taxa), sep = "")
   
   dat <- as.data.frame(cbind(Treat.Effect, Taxa))
-  
-  ### Regression Tree 
-  
   control <- rpart.control(minsplit = 20, minbucket = round(20/3), cp = 1e-5, xval = nrow(dat)) 
   dt.fit <- rpart(Treat.Effect ~ ., data = dat, method = "anova", control = control)
   
@@ -67,29 +63,54 @@ subgroup.id <- function(Treat.Effect, taxa.out, type, level.name){
   return(list(Taxa = Taxa, taxa.names = taxa.names, dat = dat, best.dt.fit = best.dt.fit, Treat.Effect = Treat.Effect))
 }
 
-subgroup.id.vis <- function(best.dt.fit){
+subgroup.id.vis <- function(best.dt.fit) {
   rpart.plot(best.dt.fit,type = 4, extra = 100, under = TRUE, fallen.leaves = TRUE, digits = 3, faclen = 3, cex = 0.85,
              tweak = 1.45, clip.right.labs = FALSE, box.palette = "Orange")
 }
 
-cf.imp.df <- function(fit, type){
-  if(type == 0){
+bort.func <- function(subgroup.id.result, level.name, n.tree = 10000) {
+  best.dt.fit <- subgroup.id.result$best.dt.fit
+  taxa.names <- subgroup.id.result$taxa.names
+  Treat.Effect <- subgroup.id.result$Treat.Effect
+  ind <- grep(substr(level.name, 1, 1), as.character(best.dt.fit$frame$var))
+  sel.taxa <- as.character(best.dt.fit$frame$var)[ind]
+  taxa.num <- as.numeric(gsub(substr(level.name, 1, 1), "", as.character(best.dt.fit$frame$var)[ind]))
+  Sel.Taxa <- t(as.data.frame(taxa.names[taxa.num]))
+  rownames(Sel.Taxa) <- "Full names"
+  colnames(Sel.Taxa) <- sel.taxa
+  BoRT.out <- boot.test(Z.hat = Treat.Effect, best.dt.fit, n.boot = n.tree)
+  BoRT.out <- round(BoRT.out, 3)
+  colnames(BoRT.out) <- NULL
+  out <- list(Sel.Taxa = Sel.Taxa, BoRT.out = BoRT.out)
+  return(out)
+}
+
+bort.treatment.pred <- function(subgroup.id.result, level.name, n.tree = 10000) {
+  Taxa <- subgroup.id.result$Taxa
+  Treat.Effect <- subgroup.id.result$Treat.Effect
+  rf.cv <- rfcv(trainx = Taxa, trainy = Treat.Effect, cv.fold = 10, scale = "log", step = 0.8, 
+                recursive = FALSE, ntree = n.tree/10)
+  opt.mtry <- as.numeric(names(which.min(rf.cv$error.cv)))
+  rf.fit <- randomForest(x = Taxa, y = Treat.Effect, mtry = opt.mtry, importance = TRUE, ntree = n.tree)
+  return(rf.fit)
+}
+
+cf.imp.df <- function(fit, type) {
+  if(type == 0) {
     imp <- randomForest::importance(fit)
-  }
-  else if(type == 1){
+  } else if(type == 1) {
     imp <- randomForest::importance(fit, type = 1)
-  }
-  else if(type == 2){
+  } else if(type == 2) {
     imp <- randomForest::importance(fit, type = 2)
   }
-  if("%IncMSE" %in% colnames(imp)){
+  if("%IncMSE" %in% colnames(imp)) {
     ind <- which(colnames(imp) == "%IncMSE")
     colnames(imp)[ind] <- "IncMSE"
   }
   return(as.data.frame(imp))
 }
 
-cf.imp.plot <- function(fit, type, n = 30, subgroup.id.result, data.type, level.name){ 
+cf.imp.plot <- function(fit, type, n = 30, subgroup.id.result, data.type, level.name) { 
   
   imp.df1 <- cf.imp.df(fit, type = 1)
   imp.df2 <- cf.imp.df(fit, type = 2)
@@ -100,16 +121,13 @@ cf.imp.plot <- function(fit, type, n = 30, subgroup.id.result, data.type, level.
   imp.df2 <- data.frame(imp.df2, ma)
   colnames(imp.df2)[2] <- "MeanAbundance"
   
-  if(data.type == "clr"){
+  if(data.type == "clr") {
     data.type <- "CLR"
-  }
-  else if(data.type == "prop"){
+  } else if(data.type == "prop") {
     data.type <- "Proportion"
-  }
-  else if(data.type == "rare.count"){
+  } else if(data.type == "rare.count") {
     data.type <- "Rarefied Count"
-  }
-  else if(data.type == "arcsin"){
+  } else if(data.type == "arcsin") {
     data.type <- "Arcsine-Root"
   }
   
@@ -158,7 +176,7 @@ cf.imp.plot <- function(fit, type, n = 30, subgroup.id.result, data.type, level.
     xlab(element_blank()) +
     ylab("Decrease in Node Impurity")
   
-  if(type == 0){
+  if(type == 0) {
     return(imp.df1 + imp.df2)
   } else if(type == 1) {
     return(imp.df1)
@@ -167,7 +185,7 @@ cf.imp.plot <- function(fit, type, n = 30, subgroup.id.result, data.type, level.
   }
 }
 
-cf.pdp.reg <- function(fit, X, n, data.type){
+cf.pdp.reg <- function(fit, X, n, data.type) {
   rf.importance <- cf.imp.df(fit, type = 1) %>%
     mutate(taxon = rownames(cf.imp.df(fit, type = 1))) %>%
     arrange(-IncMSE) %>%
@@ -176,9 +194,10 @@ cf.pdp.reg <- function(fit, X, n, data.type){
   feature <- rf.importance[1:n]
   result <- data.frame()
   
-  if(data.type == "clr"){
+  if(data.type == "clr") {
     type = "CLR"
-  } else if(data.type == "prop") {
+  }
+  else if(data.type == "prop") {
     type = "Proportion"
   } else if(data.type == "rare.count") {
     type = "Rarefied Count"
@@ -186,12 +205,11 @@ cf.pdp.reg <- function(fit, X, n, data.type){
     type = "Arcsine-Root"
   }
   
-  for(taxon.name in feature){
+  for(taxon.name in feature) {
     val <- numeric()
     y_hat <- numeric()
     taxon.val <- seq(min(X[,taxon.name]), max(X[,taxon.name]),len = 100)
-    
-    for(i in 1:length(taxon.val)){
+    for(i in 1:length(taxon.val)) {
       newX <- X
       newX[,taxon.name] <- rep(taxon.val[i], nrow(newX))
       y_pred <- predict(fit, newX)
@@ -221,12 +239,11 @@ cf.pdp.reg <- function(fit, X, n, data.type){
   p
 }
 
-cf.dt.used.var <- function(step2.result){
+cf.dt.used.var <- function(step2.result) {
   new.name <- setdiff(step2.result$best.dt.fit$frame$var, "<leaf>")
   var.name.df <- data.frame(sub = colnames(step2.result$Taxa), ori = step2.result$taxa.names)
-  
   ori.name <- c()
-  for(name in new.name){
+  for(name in new.name) {
     ind <- which(name == var.name.df$sub)
     ori.name <- c(ori.name, var.name.df$ori[ind])
   }
@@ -235,12 +252,11 @@ cf.dt.used.var <- function(step2.result){
   return(output)
 }
 
-rf.used.var <- function(step2.result, step4.result, n = 20){
+rf.used.var <- function(step2.result, step4.result, n = 20) {
   new.name <- cf.imp.df(step4.result, type = 1) %>% arrange(desc(IncMSE)) %>% head(n) %>% rownames
   var.name.df <- data.frame(sub = colnames(step2.result$Taxa), ori = step2.result$taxa.names)
-  
   ori.name <- c()
-  for(name in new.name){
+  for(name in new.name) {
     ind <- which(name == var.name.df$sub)
     ori.name <- c(ori.name, var.name.df$ori[ind])
   }
@@ -249,17 +265,15 @@ rf.used.var <- function(step2.result, step4.result, n = 20){
   return(output)
 }
 
-# Essentials ----------------
-
-colnames.to.ind <- function(data){ 
+colnames.to.ind <- function(data) { 
   origin <- list()
   new <- list()
-  for(name in names(data)){
+  for(name in names(data)) {
     ind.dat <- data[[name]]
     col.names <- colnames(ind.dat)
     new.names <- character()
     first.letter <- str_to_upper(substr(name, 1, 1))
-    for(i in 1:length(col.names)){
+    for(i in 1:length(col.names)) {
       new.names <- c(new.names, sprintf("%s%i", first.letter, i))
     }
     origin[[name]] <- col.names
@@ -268,15 +282,15 @@ colnames.to.ind <- function(data){
   return(list(origin = origin, new = new))
 }
 
-colnames.df <- function(colnames.list, name){
+colnames.df <- function(colnames.list, name) {
   d <- data.frame(colnames.list$origin[[name]])
   rownames(d) <- colnames.list$new[[name]]
   colnames(d) <- str_to_title(name)
   return(d)
 }
 
-change.colnames <- function(data, new.names){
-  for(name in names(data)){
+change.colnames <- function(data, new.names) {
+  for(name in names(data)) {
     colnames(data[[name]]) <- new.names[[name]]
   }
   return(data)
@@ -284,76 +298,73 @@ change.colnames <- function(data, new.names){
 
 "%notin%" <- Negate("%in%")
 
-get.level.names <- function(include = TRUE){
-  if(!include){
+get.level.names <- function(include = TRUE) {
+  if(!include) {
     return(c("phylum", "class", "order", "family", "genus"))
   }
   return(c("phylum", "class", "order", "family", "genus", "species"))
 }
 
-get.mean.abundance <- function(data, rank.name){
+get.mean.abundance <- function(data, rank.name) {
   return(colMeans(data))
 }
 
-remove.na <- function(data, sam.dat, y.name, level.names){
+remove.na <- function(data, sam.dat, y.name, level.names) {
   ind1 <- which(is.na(sam.dat[[y.name]]))
   ind2 <- which(sam.dat[[y.name]] == -9.00 | sam.dat[[y.name]] == -99.00 | sam.dat[[y.name]] == -999.00)
   ind <- sort(c(ind1, ind2))
-  if(length(ind) > 0){
+  if(length(ind) > 0) {
     sam.dat.na <- sam.dat[-ind,]
-    for(name in level.names){
+    for(name in level.names) {
       data[[name]] <- data[[name]][-ind,]
     }
-  }
-  else {
+  } else {
     sam.dat.na <- sam.dat
   }
   return(list(data = data, sam.dat.na = sam.dat.na))
 }
 
-category.names <- function(sam.dat, y.name){
+category.names <- function(sam.dat, y.name) {
   return(names(table(sam.dat[[y.name]])))
 }
 
-str.check <- function(sam.dat, y.name){
+str.check <- function(sam.dat, y.name) {
   out <- character()
   var <- sam.dat[[y.name]]
   len <- length(table(var))
-  if(len == 2){
+  if(len == 2) {
     return("Binary")
   }
-  else if(len >= 3 & len <= 8){
+  else if(len >= 3 & len <= 8) {
     return("Multinomial")
-  }
-  else if(len > 8 & is.numeric(var)){
+  } else if(len > 8 & is.numeric(var)) {
     return("Continuous")
-  }
-  else {
+  } else {
     return("Neither")
   }
 }
 
-bmc.col.check <- function(sam.dat, type = c("Binary", "Multinomial", "Continuous")){
+bmc.col.check <- function(sam.dat, type = c("Binary", "Multinomial", "Continuous")) {
   dtype.vector <- character()
-  for(name in colnames(sam.dat)){
+  for(name in colnames(sam.dat)) {
     dtype.vector <- c(dtype.vector, str.check(sam.dat, name))
   }
   ind <- which(dtype.vector == type)
   return(colnames(sam.dat[,ind]))
 }
 
-col.str.check <- function(sam.dat, name){
+col.str.check <- function(sam.dat, name) {
   dtype <- character()
-  if(length(table(sam.dat[[name]])) == 1){
+  if(length(table(sam.dat[[name]])) == 1) {
     dtype <- "none"
   } else if((is.character(sam.dat[[name]])) | (is.factor(sam.dat[[name]]))) {
-    if(length(unique(sam.dat[[name]])) == nrow(sam.dat)){
+    if(length(unique(sam.dat[[name]])) == nrow(sam.dat)) {
       dtype <- "none"
     } else {
       dtype <- "factor"
     }
   } else if(is.numeric(sam.dat[[name]])) {
-    if(length(table(sam.dat[[name]])) == 2){
+    if(length(table(sam.dat[[name]])) == 2) {
       dtype <- "factor"
     } else if(length(unique(sam.dat[[name]])) == nrow(sam.dat)) {
       dtype <- "none"
@@ -366,17 +377,17 @@ col.str.check <- function(sam.dat, name){
   return(dtype)
 }
 
-get.cov.col <- function(sam.dat){
+get.cov.col <- function(sam.dat) {
   dtype <- character()
   names <- colnames(sam.dat)
-  for(name in names){
+  for(name in names) {
     dtype <- c(dtype, col.str.check(sam.dat, name))
   }
   cov.col <- names[dtype != "none"]
   return(cov.col)
 }
 
-get.cat.levels <- function(sam.dat, y.name){
+get.cat.levels <- function(sam.dat, y.name) {
   levels <- levels(as.factor(unlist(sam.dat[[y.name]])))
   if(length(levels) >= 2 & length(levels) <= 4) {
     return(levels)
@@ -385,19 +396,19 @@ get.cat.levels <- function(sam.dat, y.name){
   }
 }
 
-remove.symb <- function(X){
+remove.symb <- function(X) {
   rep_str <- c("-" = "_", ";" = "_", ":" = "_", " " = "_", "\\(" = "", "\\)" = "", "\\]" = "", "\\[" = "", "\\*" = "_", "^" = "_", "&" = "_", "\\=" = "_", "\\." = "")
   colnames(X) <- str_replace_all(colnames(X), rep_str)
   colnames(X) <- substr(colnames(X), 2, nchar(colnames(X)))
   return(X)
 }
 
-cov.remove.na <- function(data, sam.dat, y.name, cov.name, level.names){
+cov.remove.na <- function(data, sam.dat, y.name, cov.name, level.names) {
   new.sam.dat <- sam.dat[,c(cov.name, y.name)]
   ind <- sort(as.vector(which(is.na(new.sam.dat), arr.ind = TRUE)[,1]))
   if(length(ind) > 0) {
     sam.dat.na <- new.sam.dat[-ind,]
-    for(name in level.names){
+    for(name in level.names) {
       data[[name]] <- data[[name]][-ind,]
     }
   } else {
@@ -406,7 +417,7 @@ cov.remove.na <- function(data, sam.dat, y.name, cov.name, level.names){
   return(list(data = data, sam.dat.na = sam.dat.na))
 }
 
-cov.linear.reg <- function(sam.dat, y.name){
+cov.linear.reg <- function(sam.dat, y.name) {
   f1 <<- as.formula(paste(y.name, "~", ".", sep=" "))
   fit <- lm(f1, data = data.frame(sam.dat))
   resid <- resid(fit)
@@ -414,7 +425,7 @@ cov.linear.reg <- function(sam.dat, y.name){
   return(sam.dat.resid)
 }
 
-cov.logistic.reg <- function(sam.dat, y.name){
+cov.logistic.reg <- function(sam.dat, y.name) {
   f1 <<- as.formula(paste(y.name, "~", ".", sep=" "))
   fit <- glm(f1, data = data.frame(sam.dat), family = "binomial")
   resid <- residuals(fit, type = "pearson")
@@ -422,23 +433,16 @@ cov.logistic.reg <- function(sam.dat, y.name){
   return(sam.dat.resid)
 }
 
-cov.mult.logistic.reg <- function(sam.dat, y.name){
+cov.mult.logistic.reg <- function(sam.dat, y.name) {
   f1 <<- as.formula(paste(y.name, "~", ".", sep=" "))
   fit <- vglm(f1, family = multinomial, data = data.frame(sam.dat))
   resid <- residuals(fit, type = "pearson")
   n <- length(category.names(sam.dat, y.name)) - 1
   resid.name <- character()
-  for(i in 1:n){
+  for(i in 1:n) {
     resid.name <- c(resid.name, paste0("resid",i))
   }
   colnames(resid) <- resid.name
   sam.dat.resid <- cbind(sam.dat, resid)
   return(sam.dat.resid)
-}
-
-chat_gpt_MiTree <- function(taxa.name, var.name, api.key){
-  Sys.setenv(OPENAI_API_KEY = api.key)
-  past_question <- paste("Tell me about the roles of", taxa.name, "on", var.name)
-  chat <- ask_chatgpt(past_question)
-  return(chat)
 }

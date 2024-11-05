@@ -2,15 +2,15 @@
 
 **Title:** Microbiome Causal Machine Learning (MiCML)
 
-**Version:** 1.0.0
+**Version:** 1.0.1
 
 **Description:** MiCML (microbiome causal machine learning) is a cloud computing platform that streamlines related data processing and analytic procedures for the analysis of treatment effects using microbiome profiles on user-friendly web environments. MiCML is in particular unique with the up-to-date features of (i) batch effect correction to mitigate systematic variation in collective large-scale microbiome data due to the differences in their underlying batches (e.g., lab or study environments), and (ii) causal machine learning to estimate treatment effects with consistency and then discern microbial taxa that enhance (or lower) the efficacy of the primary treatment. We also stress that MiCML can handle the data from either randomized controlled trials or observational studies. MiCML can be a useful analytic tool for microbiome-based personalized medicine. MiCML consists of three Data Processing modules, (i) Data Input, (ii) Batch Effect Correction & Quality Control, and (iii) Data Transformation and three Data Analysis modules, (i) Descriptive Analysis, (ii) Generalized Linear Models, and (iii) Causal Machine Learning.
 
 **NeedsCompilation:** No
 
-**Depends:** R(≥ 4.1.0)
+**Depends:** R(≥ 4.4.0)
 
-**Imports:** Bioconductor ('BiocParallel', 'biomformat', 'phyloseq'); CRAN ('ape', 'grf', 'betareg', 'BiasedUrn', 'BiocManager', 'bios2mds', 'CompQuadForm', 'dashboardthemes', 'devtools', 'DiagrammeR', 'dirmult', 'dplyr', 'DT', 'ecodist', 'edarf', 'entropart', 'erer', 'fBasics', 'forestplot', 'fossil', 'ggplot2', 'ggthemes', 'googleVis', 'gridExtra', 'gridGraphics', 'compositions', 'GUniFrac', 'htmltools', 'ICSNP', 'lme4', 'lmerTest', 'MiRKAT', 'mmpf', 'nlme', 'patchwork', 'phangorn', 'picante', 'plotly', 'PMCMRplus', 'quantreg', 'remotes', 'reticulate', 'rgl', 'rmarkdown', 'robCompositions', 'robustbase', 'seqinr', 'shiny', 'shinydashboard', 'shinyjs', 'shinyWidgets', 'stringr', 'tidyverse', 'vegan', 'xtable', 'zCompositions', 'zip', 'bda', 'mediation'); GitHub ('ConQuR')
+**Imports:** 'ape', 'phyloseq', 'shiny', 'shinydashboard', 'shinyjs', 'shinyWidgets', 'session'
 
 **License:** General Public License 3 (GPL3) 
 
