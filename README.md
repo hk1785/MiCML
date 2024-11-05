@@ -8,9 +8,9 @@
 
 **NeedsCompilation:** No
 
-**Depends:** R(≥ 4.4.0)
+**Depends:** R(≥ 4.4.2)
 
-**Imports:** 'ape', 'phyloseq', 'shiny', 'shinydashboard', 'shinyjs', 'shinyWidgets', 'session'
+**Imports:** 'ape', 'phyloseq', 'shiny', 'session'
 
 **License:** General Public License 3 (GPL3) 
 
