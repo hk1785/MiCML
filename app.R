@@ -80,6 +80,8 @@ source("Source/MiDataProc.Descriptive.R")
 source("Source/MiDataProc.GLM.R")
 source("Source/MiDataProc.CML.R")
 
+set.seed(487)
+
 # COMMENTS ------
 
 {
