@@ -1,7 +1,7 @@
 options(scipen=999)
 options(warn=-1)
 
-ls.pkg <- c('ape', 'BiocManager', 'bios2mds', 'caret', 'compositions', 'data.table', 'doParallel', 'DT', 'ecodist', 'edarf', 'fossil', 'fontawesome', 
+ls.pkg <- c('ape', 'BiocManager', 'bios2mds', 'caret', 'checkmate', 'compositions', 'data.table', 'doParallel', 'DT', 'ecodist', 'edarf', 'fossil', 'fontawesome', 
             'GUniFrac', 'googleVis', 'ggplot2', 'ggplotify', 'grid', 'grf', 'htmltools', 
             'Matrix', 'MiRKAT', 'mmpf', 'phangorn', 'picante', 'plotly', 'proxy', 
             'randomForest', 'remotes', 'reshape2', 'rpart', 'rpart.plot', 'rmarkdown', 'seqinr', 'shiny', 'shinydashboard', 'shinyjs', 'shinyWidgets', 'stringr', 
