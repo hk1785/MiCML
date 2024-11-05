@@ -1,4 +1,4 @@
-double.sample.treatment.pred <- function(Feature, Response, Treatment, n.tree = 10000) {
+double.sample.treatment.pred <- function(Feature, Response, Treatment, n.tree = 30000) {
   s.time <- proc.time()
   cf.fit <- causal_forest(X = Feature, Y = Response, W = Treatment, num.trees = n.tree, 
                           sample.weights = NULL, clusters = NULL, equalize.cluster.weights = FALSE,
@@ -8,7 +8,7 @@ double.sample.treatment.pred <- function(Feature, Response, Treatment, n.tree = 
                           ci.group.size = 2, tune.parameters = "all",
                           tune.num.trees = n.tree/10, tune.num.reps = n.tree/10, tune.num.draws = n.tree/10, 
                           compute.oob.predictions = TRUE, num.threads = NULL, 
-                          seed = 521)
+                          seed = 487)
   e.time <- proc.time()
   e.time - s.time
   pred <- predict(cf.fit, estimate.variance = TRUE)
@@ -16,10 +16,10 @@ double.sample.treatment.pred <- function(Feature, Response, Treatment, n.tree = 
   return(list(fit = cf.fit, Treat.Effect = pred$predictions))
 }
 
-propensity.treatment.pred <- function(Feature, Response, Treatment, Covariate, n.tree = 10000) {
-  reg.W.fit <- regression_forest(X = Feature, Y = Treatment, num.trees = n.tree, seed = 521)
+propensity.treatment.pred <- function(Feature, Response, Treatment, Covariate, n.tree = 30000) {
+  reg.W.fit <- regression_forest(X = Feature, Y = Treatment, num.trees = n.tree, seed = 487)
   W.hat <- predict(reg.W.fit)$predictions
-  reg.Y.fit <- regression_forest(X = Feature, Y = Response, num.trees = n.tree, seed = 521)
+  reg.Y.fit <- regression_forest(X = Feature, Y = Response, num.trees = n.tree, seed = 487)
   Y.hat <- predict(reg.Y.fit)$predictions
   s.time <- proc.time()
   cf.fit <- causal_forest(X = Feature, Y = Response, W = Treatment, num.trees = n.tree, 
@@ -31,7 +31,7 @@ propensity.treatment.pred <- function(Feature, Response, Treatment, Covariate, n
                           ci.group.size = 2, tune.parameters = "all",
                           tune.num.trees = n.tree/10, tune.num.reps = n.tree/10, tune.num.draws = n.tree/10, 
                           compute.oob.predictions = TRUE, num.threads = NULL, 
-                          seed = 521)
+                          seed = 487)
   e.time <- proc.time()
   e.time - s.time
   pred <- predict(cf.fit, estimate.variance = TRUE)
@@ -68,7 +68,7 @@ subgroup.id.vis <- function(best.dt.fit) {
              tweak = 1.45, clip.right.labs = FALSE, box.palette = "Orange")
 }
 
-bort.func <- function(subgroup.id.result, level.name, n.tree = 10000) {
+bort.func <- function(subgroup.id.result, level.name, n.tree = 30000) {
   best.dt.fit <- subgroup.id.result$best.dt.fit
   taxa.names <- subgroup.id.result$taxa.names
   Treat.Effect <- subgroup.id.result$Treat.Effect
@@ -85,7 +85,7 @@ bort.func <- function(subgroup.id.result, level.name, n.tree = 10000) {
   return(out)
 }
 
-bort.treatment.pred <- function(subgroup.id.result, level.name, n.tree = 10000) {
+bort.treatment.pred <- function(subgroup.id.result, level.name, n.tree = 30000) {
   Taxa <- subgroup.id.result$Taxa
   Treat.Effect <- subgroup.id.result$Treat.Effect
   rf.cv <- rfcv(trainx = Taxa, trainy = Treat.Effect, cv.fold = 10, scale = "log", step = 0.8, 
