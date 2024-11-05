@@ -16,7 +16,6 @@ if(!require('biomformat')) remotes::install_github('joey711/biomformat')
 if(!require('dashboardthemes')) remotes::install_github('nik01010/dashboardthemes', force = TRUE)
 if(!require('chatgpt')) remotes::install_github('jcrodriguez1989/chatgpt')
 if(!require('mmpf')) install.packages('Source/mmpf_0.0.5.tar.gz', repos = NULL, type="source")
-if(!require('session')) install.packages('Source/session_1.0.3.tar.gz', repos = NULL, type = "source")
 if(!require('edarf')) remotes::install_github('zmjones/edarf', subdir = "pkg", force = TRUE)
 if(!require('ConQuR')) remotes::install_github('wdl2459/ConQuR', force = TRUE)
 if(!require('sva')) BiocManager::install('sva')
@@ -76,10 +75,6 @@ library(VGAM)
 library(xtable)
 library(zCompositions)
 library(zip)
-
-library(session)
-
-restore.session(file="Source/rpackages.Rda")
 
 source("Source/MiDataProc.DataInput.R")
 source("Source/MiDataProc.Descriptive.R")
