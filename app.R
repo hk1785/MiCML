@@ -21,11 +21,6 @@ if(!require('sva')) BiocManager::install('sva')
 if(!require('aVirtualTwins')) remotes::install_github("prise6/aVirtualTwins", build_vignettes = TRUE)
 if(!require('MiVT')) remotes::install_github("hk1785/MiVT", force = TRUE)
 if(!require('MiRKATMC')) remotes::install_github("Zhiwen-Owen-Jiang/MiRKATMC")
-if(!require('session')) install.packages('Source/session_1.0.3.tar.gz', repos = NULL, type="source")
-
-library(session)
-
-restore.session(file="Source/rpackages.Rda")
 
 source("Source/MiDataProc.DataInput.R")
 source("Source/MiDataProc.Descriptive.R")
