@@ -1,6 +1,26 @@
 options(scipen=999)
 options(warn=-1)
 
+ls.pkg <- c('ape', 'BiocManager', 'bios2mds', 'caret', 'compositions', 'data.table', 'doParallel', 'DT', 'ecodist', 'edarf', 'fossil', 'fontawesome', 
+            'GUniFrac', 'googleVis', 'ggplot2', 'ggplotify', 'grid', 'grf', 'htmltools', 
+            'Matrix', 'MiRKAT', 'mmpf', 'phangorn', 'picante', 'plotly', 'proxy', 
+            'randomForest', 'remotes', 'reshape2', 'rpart', 'rpart.plot', 'rmarkdown', 'seqinr', 'shiny', 'shinydashboard', 'shinyjs', 'shinyWidgets', 'stringr', 
+            'tidyverse', 'vegan', 'VGAM', 'xtable', 'zCompositions', 'zip')
+
+new.pkg <- ls.pkg[!(ls.pkg %in% installed.packages()[,"Package"])]
+if(length(new.pkg)) install.packages(new.pkg, repos = 'https://cloud.r-project.org/')
+
+if(!require('phyloseq')) BiocManager::install('phyloseq')
+if(!require('biomformat')) remotes::install_github('joey711/biomformat')
+if(!require('dashboardthemes')) remotes::install_github('nik01010/dashboardthemes', force = TRUE)
+if(!require('chatgpt')) remotes::install_github('jcrodriguez1989/chatgpt')
+if(!require('mmpf')) install.packages('Source/mmpf_0.0.5.tar.gz', repos = NULL, type="source")
+if(!require('edarf')) remotes::install_github('zmjones/edarf', subdir = "pkg")
+if(!require('ConQuR')) remotes::install_github('wdl2459/ConQuR', force = TRUE)
+if(!require('sva')) BiocManager::install('sva')
+if(!require('aVirtualTwins')) remotes::install_github("prise6/aVirtualTwins", build_vignettes = TRUE)
+if(!require('MiVT')) remotes::install_github("hk1785/MiVT", force = TRUE)
+if(!require('MiRKATMC')) remotes::install_github("Zhiwen-Owen-Jiang/MiRKATMC")
 if(!require('session')) install.packages('Source/session_1.0.3.tar.gz', repos = NULL, type="source")
 
 library(session)
