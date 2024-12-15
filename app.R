@@ -1660,14 +1660,14 @@ server = function(input, output, session){
           
           if(input$batch.method == "ConQuR"){
             ref.bat <- names(which.max(table(batchid)))
-            set.seed(578)
+            set.seed(578, kind = "Mersenne-Twister", normal.kind = "Inversion")
             try(adjusted.otu.tab <- ConQuR(tax_tab = otu.tab, batchid = batchid,
                                            covariates = covar, batch_ref = ref.bat,
                                            logistic_lasso = T, quantile_type = "lasso", interplt = T, num_core = 1), silent = TRUE)
             bat.otu.tab <- otu_table(t(as.data.frame(as.matrix(adjusted.otu.tab))), taxa_are_rows = TRUE)
           }
           else{
-            set.seed(578)
+            set.seed(578, kind = "Mersenne-Twister", normal.kind = "Inversion")
             adjusted.otu.tab <- sva::ComBat_seq(otu.tab, batch=batchid, group=NULL, covar_mod = covar)
             bat.otu.tab <- otu_table(as.data.frame(as.matrix(adjusted.otu.tab)), taxa_are_rows = TRUE)
           }
@@ -3029,7 +3029,7 @@ server = function(input, output, session){
           
           # Step 1. Treatment Effect Prediction
           incProgress(1/20, message = "Double Sample Tree: Treatment Effect Prediction in progress")
-          set.seed(578)
+          set.seed(578, kind = "Mersenne-Twister", normal.kind = "Inversion")
           step1.result <- try(double.sample.treatment.pred(Feature, Response, Treatment, n.tree = 12000), silent = TRUE)
           
           for(name in level.names){
@@ -3041,12 +3041,12 @@ server = function(input, output, session){
             
             # Step 3. BoRT
             # incProgress(1/40, message = paste0(str_to_title(name), ": BoRT in progress"))
-            set.seed(578)
+            set.seed(578, kind = "Mersenne-Twister", normal.kind = "Inversion")
             step3.result <- try(bort.func(step2.result, name, n.tree = 100), silent = TRUE)
             
             # Step 4. Treatment Effect Prediction (randomForest)
             incProgress(1/40, message = paste0(str_to_title(name), ": Treatment Effect Prediction in progress"))
-            set.seed(578)
+            set.seed(578, kind = "Mersenne-Twister", normal.kind = "Inversion")
             step4.result <- try(bort.treatment.pred(step2.result, name, n.tree = 100), silent = TRUE)
             
             dt.fit.list[[name]] <- step2.result$best.dt.fit
@@ -3140,7 +3140,7 @@ server = function(input, output, session){
             Covariate <- model.matrix(f1, data = df)[,-1]
             
             incProgress(1/20, message = "Propensity Tree with Covariate(s): Treatment Effect Prediction in progress")
-            set.seed(578)
+            set.seed(578, kind = "Mersenne-Twister", normal.kind = "Inversion")
             step1.result <- try(propensity.treatment.pred(Feature, Response, Treatment, Covariate, n.tree = 12000), silent = TRUE)
           }
           
@@ -3148,7 +3148,7 @@ server = function(input, output, session){
           
           else {
             incProgress(1/20, message = "Propensity Tree without Covariate: Treatment Effect Prediction in progress")
-            set.seed(578)
+            set.seed(578, kind = "Mersenne-Twister", normal.kind = "Inversion")
             step1.result <- try(propensity.treatment.pred(Feature, Response, Treatment, n.tree = 12000), silent = TRUE)
           }
           
@@ -3156,20 +3156,20 @@ server = function(input, output, session){
             
             # Step 2. Subgroup Identification
             incProgress(1/40, message = paste0(str_to_title(name), ": Subgroup Identification in progress"))
-            set.seed(578)
+            set.seed(578, kind = "Mersenne-Twister", normal.kind = "Inversion")
             step2.result <- try(subgroup.id(Treat.Effect = step1.result$Treat.Effect, taxa.out = taxa.out, type = type, level.name = name), silent = TRUE)
             
             var.names.list[[name]] <- data.frame(sub = colnames(step2.result$Taxa), ori = step2.result$taxa.names)
             
             # Step 3. BoRT
             
-            set.seed(578)
+            set.seed(578, kind = "Mersenne-Twister", normal.kind = "Inversion")
             step3.result <- try(bort.func(step2.result, name, n.tree = 100), silent = TRUE)
             
             # Step 4. Treatment Effect Prediction (randomForest)
             
             incProgress(1/40, message = paste0(str_to_title(name), ": Treatment Effect Prediction in progress"))
-            set.seed(578)
+            set.seed(578, kind = "Mersenne-Twister", normal.kind = "Inversion")
             step4.result <- try(bort.treatment.pred(step2.result, name, n.tree = 100), silent = TRUE)
             
             dt.fit.list[[name]] <- step2.result$best.dt.fit
