@@ -203,7 +203,8 @@ mean.prop.func <- function(biom) {
 
 rarefy.func <- function(biom, cut.off, multi.rarefy = FALSE, tree.exists = TRUE) {
   if (!multi.rarefy | multi.rarefy == 1) {
-    try(biom <- rarefy_even_depth(biom, cut.off, rngseed = 487), silent = TRUE)
+    set.seed(487, kind = "Mersenne-Twister", normal.kind = "Inversion")
+    try(biom <- rarefy_even_depth(biom, cut.off), silent = TRUE)
   } else {
     otu.tab <- otu_table(biom)
     tax.tab <- tax_table(biom)
