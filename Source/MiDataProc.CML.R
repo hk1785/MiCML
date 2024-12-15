@@ -49,9 +49,9 @@ subgroup.id <- function(Treat.Effect, taxa.out, type, level.name) {
   colnames(Taxa) <- paste(substr(level.name, 1, 1), 1:ncol(Taxa), sep = "")
   
   dat <- as.data.frame(cbind(Treat.Effect, Taxa))
-  set.seed(578, kind = "Mersenne-Twister", normal.kind = "Inversion")
+  set.seed(521, kind = "Mersenne-Twister", normal.kind = "Inversion")
   control <- rpart.control(minsplit = 20, minbucket = round(20/3), cp = 1e-5, xval = nrow(dat)) 
-  set.seed(578, kind = "Mersenne-Twister", normal.kind = "Inversion")
+  set.seed(521, kind = "Mersenne-Twister", normal.kind = "Inversion")
   dt.fit <- rpart(Treat.Effect ~ ., data = dat, method = "anova", control = control)
   
   if (identical(class(dt.fit$cptable[-1,]), c("matrix", "array"))) {
@@ -64,7 +64,7 @@ subgroup.id <- function(Treat.Effect, taxa.out, type, level.name) {
 }
 
 subgroup.id.vis <- function(best.dt.fit) {
-  set.seed(578, kind = "Mersenne-Twister", normal.kind = "Inversion")
+  set.seed(521, kind = "Mersenne-Twister", normal.kind = "Inversion")
   rpart.plot(best.dt.fit,type = 4, extra = 100, under = TRUE, fallen.leaves = TRUE, digits = 3, faclen = 3, cex = 0.85,
              tweak = 1.45, clip.right.labs = FALSE, box.palette = "Orange")
 }
@@ -79,7 +79,7 @@ bort.func <- function(subgroup.id.result, level.name, n.tree = 10000) {
   Sel.Taxa <- t(as.data.frame(taxa.names[taxa.num]))
   rownames(Sel.Taxa) <- "Full names"
   colnames(Sel.Taxa) <- sel.taxa
-  set.seed(578, kind = "Mersenne-Twister", normal.kind = "Inversion")
+  set.seed(521, kind = "Mersenne-Twister", normal.kind = "Inversion")
   BoRT.out <- boot.test(Z.hat = Treat.Effect, best.dt.fit, n.boot = n.tree)
   BoRT.out <- round(BoRT.out, 3)
   colnames(BoRT.out) <- NULL
@@ -90,24 +90,24 @@ bort.func <- function(subgroup.id.result, level.name, n.tree = 10000) {
 bort.treatment.pred <- function(subgroup.id.result, level.name, n.tree = 10000) {
   Taxa <- subgroup.id.result$Taxa
   Treat.Effect <- subgroup.id.result$Treat.Effect
-  set.seed(578, kind = "Mersenne-Twister", normal.kind = "Inversion")
+  set.seed(521, kind = "Mersenne-Twister", normal.kind = "Inversion")
   rf.cv <- rfcv(trainx = Taxa, trainy = Treat.Effect, cv.fold = 10, scale = "log", step = 0.8, 
                 recursive = FALSE, ntree = n.tree/10)
   opt.mtry <- as.numeric(names(which.min(rf.cv$error.cv)))
-  set.seed(578, kind = "Mersenne-Twister", normal.kind = "Inversion")
+  set.seed(521, kind = "Mersenne-Twister", normal.kind = "Inversion")
   rf.fit <- randomForest(x = Taxa, y = Treat.Effect, mtry = opt.mtry, importance = TRUE, ntree = n.tree)
   return(rf.fit)
 }
 
 cf.imp.df <- function(fit, type) {
   if(type == 0) {
-    set.seed(578, kind = "Mersenne-Twister", normal.kind = "Inversion")
+    set.seed(521, kind = "Mersenne-Twister", normal.kind = "Inversion")
     imp <- randomForest::importance(fit)
   } else if(type == 1) {
-    set.seed(578, kind = "Mersenne-Twister", normal.kind = "Inversion")
+    set.seed(521, kind = "Mersenne-Twister", normal.kind = "Inversion")
     imp <- randomForest::importance(fit, type = 1)
   } else if(type == 2) {
-    set.seed(578, kind = "Mersenne-Twister", normal.kind = "Inversion")
+    set.seed(521, kind = "Mersenne-Twister", normal.kind = "Inversion")
     imp <- randomForest::importance(fit, type = 2)
   }
   if("%IncMSE" %in% colnames(imp)) {
