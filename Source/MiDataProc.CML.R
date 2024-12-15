@@ -1,5 +1,6 @@
 double.sample.treatment.pred <- function(Feature, Response, Treatment, n.tree = 10000) {
   s.time <- proc.time()
+  set.seed(521, kind = "Mersenne-Twister", normal.kind = "Inversion")
   cf.fit <- causal_forest(X = Feature, Y = Response, W = Treatment, num.trees = n.tree, 
                           sample.weights = NULL, clusters = NULL, equalize.cluster.weights = FALSE,
                           sample.fraction = 0.5, min.node.size = 5, 
@@ -7,8 +8,7 @@ double.sample.treatment.pred <- function(Feature, Response, Treatment, n.tree = 
                           alpha = 0.05, imbalance.penalty = 0, stabilize.splits = TRUE, 
                           ci.group.size = 2, tune.parameters = "all",
                           tune.num.trees = n.tree/10, tune.num.reps = n.tree/10, tune.num.draws = n.tree/10, 
-                          compute.oob.predictions = TRUE, num.threads = NULL, 
-                          seed = 521)
+                          compute.oob.predictions = TRUE, num.threads = NULL)
   e.time <- proc.time()
   e.time - s.time
   pred <- predict(cf.fit, estimate.variance = TRUE)
@@ -17,11 +17,14 @@ double.sample.treatment.pred <- function(Feature, Response, Treatment, n.tree = 
 }
 
 propensity.treatment.pred <- function(Feature, Response, Treatment, Covariate, n.tree = 10000) {
-  reg.W.fit <- regression_forest(X = Feature, Y = Treatment, num.trees = n.tree, seed = 521)
+  set.seed(521, kind = "Mersenne-Twister", normal.kind = "Inversion")
+  reg.W.fit <- regression_forest(X = Feature, Y = Treatment, num.trees = n.tree)
   W.hat <- predict(reg.W.fit)$predictions
-  reg.Y.fit <- regression_forest(X = Feature, Y = Response, num.trees = n.tree, seed = 521)
+  set.seed(521, kind = "Mersenne-Twister", normal.kind = "Inversion")
+  reg.Y.fit <- regression_forest(X = Feature, Y = Response, num.trees = n.tree)
   Y.hat <- predict(reg.Y.fit)$predictions
   s.time <- proc.time()
+  set.seed(521, kind = "Mersenne-Twister", normal.kind = "Inversion")
   cf.fit <- causal_forest(X = Feature, Y = Response, W = Treatment, num.trees = n.tree, 
                           Y.hat = Y.hat, W.hat = W.hat, 
                           sample.weights = NULL, clusters = NULL, equalize.cluster.weights = FALSE,
@@ -30,8 +33,7 @@ propensity.treatment.pred <- function(Feature, Response, Treatment, Covariate, n
                           alpha = 0.05, imbalance.penalty = 0, stabilize.splits = TRUE, 
                           ci.group.size = 2, tune.parameters = "all",
                           tune.num.trees = n.tree/10, tune.num.reps = n.tree/10, tune.num.draws = n.tree/10, 
-                          compute.oob.predictions = TRUE, num.threads = NULL, 
-                          seed = 521)
+                          compute.oob.predictions = TRUE, num.threads = NULL)
   e.time <- proc.time()
   e.time - s.time
   pred <- predict(cf.fit, estimate.variance = TRUE)
