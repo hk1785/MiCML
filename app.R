@@ -1,7 +1,7 @@
 options(scipen=999)
 options(warn=-1)
 
-ls.pkg <- c('ape', 'BiocManager', 'bios2mds', 'caret', 'checkmate', 'compositions', 'data.table', 'doParallel', 'DT', 'ecodist', 'edarf', 'fossil', 'fontawesome', 
+ls.pkg <- c('ape', 'BiocManager', 'bios2mds', 'caret', 'checkmate', 'compositions', 'data.table', 'doParallel', 'DT', 'ecodist', 'fossil', 'fontawesome', 
             'GUniFrac', 'googleVis', 'ggplot2', 'ggplotify', 'grid', 'grf', 'htmltools', 
             'Matrix', 'MiRKAT', 'mmpf', 'phangorn', 'picante', 'plotly', 'proxy', 
             'randomForest', 'remotes', 'reshape2', 'rpart', 'rpart.plot', 'rmarkdown', 
@@ -14,9 +14,6 @@ if(length(new.pkg)) install.packages(new.pkg, repos = 'https://cloud.r-project.o
 if(!require('phyloseq')) BiocManager::install('phyloseq')
 if(!require('biomformat')) remotes::install_github('joey711/biomformat')
 if(!require('dashboardthemes')) remotes::install_github('nik01010/dashboardthemes', force = TRUE)
-if(!require('chatgpt')) remotes::install_github('jcrodriguez1989/chatgpt')
-if(!require('mmpf')) install.packages('Source/mmpf_0.0.5.tar.gz', repos = NULL, type="source")
-if(!require('edarf')) remotes::install_github('zmjones/edarf', subdir = "pkg", force = TRUE)
 if(!require('ConQuR')) remotes::install_github('wdl2459/ConQuR', force = TRUE)
 if(!require('sva')) BiocManager::install('sva')
 if(!require('aVirtualTwins')) remotes::install_github("prise6/aVirtualTwins", build_vignettes = TRUE)
@@ -28,7 +25,6 @@ library(ape)
 library(bios2mds)
 library(BiocManager)
 library(biomformat)
-library(chatgpt)
 library(ConQuR)
 library(compositions)
 library(caret)
@@ -38,7 +34,6 @@ library(DT)
 library(data.table)
 library(dplyr)
 library(ecodist)
-library(edarf)
 library(fontawesome)
 library(fossil)
 library(googleVis)
@@ -52,7 +47,6 @@ library(Matrix)
 library(MiRKAT)
 library(MiRKATMC)
 library(MiVT)
-library(mmpf)
 library(plotly)
 library(phangorn)
 library(phyloseq)

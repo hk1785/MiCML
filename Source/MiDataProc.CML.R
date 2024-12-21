@@ -1,4 +1,4 @@
-double.sample.treatment.pred <- function(Feature, Response, Treatment, n.tree = 10000) {
+double.sample.treatment.pred <- function(Feature, Response, Treatment, n.tree = 500000) {
   s.time <- proc.time()
   cf.fit <- causal_forest(X = Feature, Y = Response, W = Treatment, num.trees = n.tree, 
                           sample.weights = NULL, clusters = NULL, equalize.cluster.weights = FALSE,
@@ -15,7 +15,7 @@ double.sample.treatment.pred <- function(Feature, Response, Treatment, n.tree = 
   return(list(fit = cf.fit, Treat.Effect = pred$predictions))
 }
 
-propensity.treatment.pred <- function(Feature, Response, Treatment, Covariate, n.tree = 10000) {
+propensity.treatment.pred <- function(Feature, Response, Treatment, Covariate, n.tree = 500000) {
   reg.W.fit <- regression_forest(X = Feature, Y = Treatment, num.trees = n.tree, seed = 521)
   W.hat <- predict(reg.W.fit)$predictions
   reg.Y.fit <- regression_forest(X = Feature, Y = Response, num.trees = n.tree, seed = 521)
@@ -69,7 +69,7 @@ subgroup.id.vis <- function(best.dt.fit) {
              tweak = 1.45, clip.right.labs = FALSE, box.palette = "Orange")
 }
 
-bort.func <- function(subgroup.id.result, level.name, n.tree = 10000) {
+bort.func <- function(subgroup.id.result, level.name, n.tree = 500000) {
   best.dt.fit <- subgroup.id.result$best.dt.fit
   taxa.names <- subgroup.id.result$taxa.names
   Treat.Effect <- subgroup.id.result$Treat.Effect
@@ -87,7 +87,7 @@ bort.func <- function(subgroup.id.result, level.name, n.tree = 10000) {
   return(out)
 }
 
-bort.treatment.pred <- function(subgroup.id.result, level.name, n.tree = 10000) {
+bort.treatment.pred <- function(subgroup.id.result, level.name, n.tree = 500000) {
   Taxa <- subgroup.id.result$Taxa
   Treat.Effect <- subgroup.id.result$Treat.Effect
   set.seed(521, kind = "Mersenne-Twister", normal.kind = "Inversion")
