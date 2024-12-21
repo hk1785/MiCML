@@ -3024,7 +3024,7 @@ server = function(input, output, session){
           # Step 1. Treatment Effect Prediction
           incProgress(1/20, message = "Double Sample Tree: Treatment Effect Prediction in progress")
           set.seed(578, kind = "Mersenne-Twister", normal.kind = "Inversion")
-          step1.result <- try(double.sample.treatment.pred(Feature, Response, Treatment, n.tree = 12000), silent = TRUE)
+          step1.result <- try(double.sample.treatment.pred(Feature, Response, Treatment, n.tree = 100000), silent = TRUE)
           
           for(name in level.names){
             # Step 2. Subgroup Identification
@@ -3036,12 +3036,12 @@ server = function(input, output, session){
             # Step 3. BoRT
             # incProgress(1/40, message = paste0(str_to_title(name), ": BoRT in progress"))
             set.seed(578, kind = "Mersenne-Twister", normal.kind = "Inversion")
-            step3.result <- try(bort.func(step2.result, name, n.tree = 100), silent = TRUE)
+            step3.result <- try(bort.func(step2.result, name, n.tree = 100000), silent = TRUE)
             
             # Step 4. Treatment Effect Prediction (randomForest)
             incProgress(1/40, message = paste0(str_to_title(name), ": Treatment Effect Prediction in progress"))
             set.seed(578, kind = "Mersenne-Twister", normal.kind = "Inversion")
-            step4.result <- try(bort.treatment.pred(step2.result, name, n.tree = 100), silent = TRUE)
+            step4.result <- try(bort.treatment.pred(step2.result, name, n.tree = 100000), silent = TRUE)
             
             dt.fit.list[[name]] <- step2.result$best.dt.fit
             # bort.out.list[[name]] <- step3.result$BoRT.out
@@ -3135,7 +3135,7 @@ server = function(input, output, session){
             
             incProgress(1/20, message = "Propensity Tree with Covariate(s): Treatment Effect Prediction in progress")
             set.seed(578, kind = "Mersenne-Twister", normal.kind = "Inversion")
-            step1.result <- try(propensity.treatment.pred(Feature, Response, Treatment, Covariate, n.tree = 12000), silent = TRUE)
+            step1.result <- try(propensity.treatment.pred(Feature, Response, Treatment, Covariate, n.tree = 100000), silent = TRUE)
           }
           
           # Step 1-2. Treatment Effect Prediction without Covariate
@@ -3143,7 +3143,7 @@ server = function(input, output, session){
           else {
             incProgress(1/20, message = "Propensity Tree without Covariate: Treatment Effect Prediction in progress")
             set.seed(578, kind = "Mersenne-Twister", normal.kind = "Inversion")
-            step1.result <- try(propensity.treatment.pred(Feature, Response, Treatment, n.tree = 12000), silent = TRUE)
+            step1.result <- try(propensity.treatment.pred(Feature, Response, Treatment, n.tree = 100000), silent = TRUE)
           }
           
           for(name in level.names){
@@ -3158,13 +3158,13 @@ server = function(input, output, session){
             # Step 3. BoRT
             
             set.seed(578, kind = "Mersenne-Twister", normal.kind = "Inversion")
-            step3.result <- try(bort.func(step2.result, name, n.tree = 100), silent = TRUE)
+            step3.result <- try(bort.func(step2.result, name, n.tree = 100000), silent = TRUE)
             
             # Step 4. Treatment Effect Prediction (randomForest)
             
             incProgress(1/40, message = paste0(str_to_title(name), ": Treatment Effect Prediction in progress"))
             set.seed(578, kind = "Mersenne-Twister", normal.kind = "Inversion")
-            step4.result <- try(bort.treatment.pred(step2.result, name, n.tree = 100), silent = TRUE)
+            step4.result <- try(bort.treatment.pred(step2.result, name, n.tree = 100000), silent = TRUE)
             
             dt.fit.list[[name]] <- step2.result$best.dt.fit
             
