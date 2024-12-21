@@ -1,4 +1,4 @@
-double.sample.treatment.pred <- function(Feature, Response, Treatment, n.tree = 30000) {
+double.sample.treatment.pred <- function(Feature, Response, Treatment, n.tree = 20000) {
   s.time <- proc.time()
   cf.fit <- causal_forest(X = Feature, Y = Response, W = Treatment, num.trees = n.tree, 
                           sample.weights = NULL, clusters = NULL, equalize.cluster.weights = FALSE,
@@ -15,7 +15,7 @@ double.sample.treatment.pred <- function(Feature, Response, Treatment, n.tree = 
   return(list(fit = cf.fit, Treat.Effect = pred$predictions))
 }
 
-propensity.treatment.pred <- function(Feature, Response, Treatment, Covariate, n.tree = 30000) {
+propensity.treatment.pred <- function(Feature, Response, Treatment, Covariate, n.tree = 20000) {
   reg.W.fit <- regression_forest(X = Feature, Y = Treatment, num.trees = n.tree, seed = 521)
   W.hat <- predict(reg.W.fit)$predictions
   reg.Y.fit <- regression_forest(X = Feature, Y = Response, num.trees = n.tree, seed = 521)
@@ -69,7 +69,7 @@ subgroup.id.vis <- function(best.dt.fit) {
              tweak = 1.45, clip.right.labs = FALSE, box.palette = "Orange")
 }
 
-bort.func <- function(subgroup.id.result, level.name, n.tree = 30000) {
+bort.func <- function(subgroup.id.result, level.name, n.tree = 20000) {
   best.dt.fit <- subgroup.id.result$best.dt.fit
   taxa.names <- subgroup.id.result$taxa.names
   Treat.Effect <- subgroup.id.result$Treat.Effect
@@ -80,14 +80,14 @@ bort.func <- function(subgroup.id.result, level.name, n.tree = 30000) {
   rownames(Sel.Taxa) <- "Full names"
   colnames(Sel.Taxa) <- sel.taxa
   set.seed(521, kind = "Mersenne-Twister", normal.kind = "Inversion")
-  BoRT.out <- boot.test(Z.hat = Treat.Effect, best.dt.fit, n.boot = 100)
+  BoRT.out <- boot.test(Z.hat = Treat.Effect, best.dt.fit, n.boot = n.tree)
   BoRT.out <- round(BoRT.out, 3)
   colnames(BoRT.out) <- NULL
   out <- list(Sel.Taxa = Sel.Taxa, BoRT.out = BoRT.out)
   return(out)
 }
 
-bort.treatment.pred <- function(subgroup.id.result, level.name, n.tree = 30000) {
+bort.treatment.pred <- function(subgroup.id.result, level.name, n.tree = 20000) {
   Taxa <- subgroup.id.result$Taxa
   Treat.Effect <- subgroup.id.result$Treat.Effect
   set.seed(521, kind = "Mersenne-Twister", normal.kind = "Inversion")
