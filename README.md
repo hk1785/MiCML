@@ -18,7 +18,7 @@
 
 **Maintainer:** Hyunwook Koh <hyunwook.koh@stonybrook.edu>
 
-**Reference:** Koh H, Kim J, Jang H. MiCML: A causal machine learning cloud platform for the analysis of treatment effects using microbiome profiles (*In review*). 
+**Reference:** Koh H, Kim J, Jang H. MiCML: A causal machine learning cloud platform for the analysis of treatment effects using microbiome profiles. *BioData Mining*, 2025:18(10):1-18. 
 
 <hr>
 
