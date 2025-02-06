@@ -100,7 +100,7 @@ source("Source/MiDataProc.CML.R")
   
   HOME_COMMENT3 = p(strong("Maintainers:"), "Hyunwook Koh (", tags$a(href = "hyunwook.koh@stonybrook.edu", "hyunwook.koh@stonybrook.edu"), ")", style = "font-size:12pt")
   
-  HOME_COMMENT4 = p(strong("Reference:"), "Koh H, Kim J, Jang H. MiCML: A causal machine learning cloud platform for the analysis of treatment effects using microbiome profiles (In review)" 
+  HOME_COMMENT4 = p(strong("Reference:"), "Koh H, Kim J, Jang H. MiCML: A causal machine learning cloud platform for the analysis of treatment effects using microbiome profiles. BioData Mining, 2025:18(10):1-18." 
                     , style = "font-size:12pt")
   
   INPUT_PHYLOSEQ_COMMENT1 = p(strong("Description:"), br(), br(), "This should be an '.rdata' or '.rds' file, and the data should be in 'phyloseq' format (see ", 
